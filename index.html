@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Foodie - A Taste of India</title>
+    <!-- Box Icons -->
+    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Indian Foodie Logo"> Indian Foodie
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link active-link">Home</a>
+                <a href="catering.html" class="nav-link">Catering</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+                <a href="user.html" class="nav-link">User</a>
+                <a href="#" class="cart-icon">
+                    <i class='bx bx-cart'></i>
+                    <span class="cart-count">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <i class='bx bx-x' id="close-cart"></i>
+        </div>
+        <div class="cart-items">
+            <!-- Cart items will be added here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cart-total-price">₹0</span>
+            </div>
+            <button class="btn checkout-btn">Checkout</button>
+        </div>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content container">
+                <h1>Welcome to Indian Foodie</h1>
+                <p>Discover the rich and aromatic flavors of authentic Indian cuisine.</p>
+                <div class="hero-buttons">
+                    <a href="user.html" class="btn btn-primary">Get Started</a>
+                    <a href="admin.html" class="btn btn-secondary">Admin Login</a>
+                </div>
+            </div>
+        </section>
+        <!-- Features Section -->
+        <section class="features container">
+            <h2>Why Choose Indian Foodie?</h2>
+            <div class="feature-cards">
+                <div class="card">
+                    <h3>Share Your Culinary Heritage</h3>
+                    <p>Showcase your family's secret recipes and traditional Indian dishes with our easy-to-use
+                        platform.</p>
+                </div>
+                <div class="card">
+                    <h3>Explore Regional Delicacies</h3>
+                    <p>From the spicy curries of the North to the savory dosas of the South, find your next favorite
+                        Indian meal here.</p>
+                </div>
+                <div class="card">
+                    <h3>Effortless Management</h3>
+                    <p>Our simple tools make it easy to manage your menu, update prices, and connect with customers.</p>
+                </div>
+            </div>
+        </section>
+        <hr class="section-divider">
+        <!-- Menu Section -->
+        <section class="menu section bd-container" id="menu">
+            <span class="section-subtitle">Special</span>
+            <h2 class="section-title">Menu Of The Week</h2>
+            <div class="menu__container bd-grid">
+                <div class="menu__content">
+                    <img src="Images/plate1.png" alt="" class="menu__img">
+                    <h3 class="menu__name">Hyderabadi Biryani</h3>
+                    <span class="menu__detail">Trademark Dish</span>
+                    <span class="menu__preci">₹328</span>
+                    <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
+                </div>
+                <div class="menu__content">
+                    <img src="Images/plate2.png" alt="" class="menu__img">
+                    <h3 class="menu__name">Chicken Salad</h3>
+                    <span class="menu__detail">Trademark Dish</span>
+                    <span class="menu__preci">₹321</span>
+                    <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
+                </div>
+                <div class="menu__content">
+                    <img src="Images/plate3.png" alt="" class="menu__img">
+                    <h3 class="menu__name">Chicken Biryani</h3>
+                    <span class="menu__detail">Trademark Dish</span>
+                    <span class="menu__preci">₹277</span>
+                    <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
+                </div>
+                <div class="menu__content">
+                    <img src="Images/plate4.png" alt="" class="menu__img" width="220px">
+                    <h3 class="menu__name">Masala Roasted Whole Chicken</h3>
+                    <span class="menu__detail">Trademark Dish</span>
+                    <span class="menu__preci">₹357</span>
+                    <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
+                </div>
+                <div class="menu__content">
+                    <img src="Images/plate5.png" alt="" class="menu__img" width="220px">
+                    <h3 class="menu__name">Citrus Chicken & Quinoa Salad </h3>
+                    <span class="menu__detail">Trademark Dish</span>
+                    <span class="menu__preci">₹248</span>
+                    <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
+                </div>
+                <div class="menu__content">
+                    <img src="Images/plate66.png" alt="" class="menu__img">
+                    <h3 class="menu__name">Vegetarian Cuisine</h3>
+                    <span class="menu__detail">Trademark Dish</span>
+                    <span class="menu__preci">₹350</span>
+                    <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <a href="index.html" class="footer-link">
+                <img src="images/logo.png" alt="Indian Foodie Logo">
+                <p>&copy; 2025 Indian Foodie — From Our Kitchen To Yours.</p>
+            </a>
+            <div class="footer-social">
+                <a href="https://www.facebook.com/" target="_blank"><i class='bx bxl-facebook'></i></a>
+                <a href="https://www.instagram.com/" target="_blank"><i class='bx bxl-instagram'></i></a>
+                <a href="https://x.com/" target="_blank"><i class='bx bxl-twitter'></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Link JS -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase.js"></script>
+    <script src="cart.js"></script>
+</body>
+
+</html>

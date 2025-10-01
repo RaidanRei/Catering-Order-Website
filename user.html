@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Kitchen - Indian Foodie</title>
+    <!-- Box Icons -->
+    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Indian Foodie Logo"> Indian Foodie
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="catering.html" class="nav-link">Catering</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+                <a href="user.html" class="nav-link active-link">User</a>
+                <a href="#" id="logout-nav" class="nav-link" style="display:none;">Logout</a>
+                <a href="#" class="cart-icon"><i class='bx bx-cart'></i></a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container user-container">
+        <div id="auth-container">
+            <h2>User Login</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Login to Your Kitchen</button>
+            </form>
+            <hr>
+            <h2>Subscribe To Our Service</h2>
+            <form id="register-form">
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="password" id="register-password" placeholder="Password" required>
+                <button type="submit">Register Your Kitchen</button>
+            </form>
+        </div>
+
+        <div id="user-panel" style="display:none;">
+            <h1>My Culinary Dashboard</h1>
+
+            <section id="upload-product-section" class="user-section">
+                <h2>Add a New Dish to Your Menu</h2>
+                <form id="upload-form">
+                    <input type="text" id="product-name" placeholder="Dish Name (e.g., Chicken Tikka Masala)" required>
+                    <textarea id="product-description"
+                        placeholder="Describe your dish, its ingredients, and what makes it special."
+                        required></textarea>
+                    <input type="number" id="product-price" placeholder="Price (in USD)" required>
+                    <input type="file" id="product-image" accept="image/*" required>
+                    <button type="submit">Add Dish</button>
+                </form>
+            </section>
+
+            <section id="my-products-section" class="user-section">
+                <h2>My Menu</h2>
+                <div id="my-product-list">
+                    <!-- User's products will be listed here -->
+                </div>
+            </section>
+
+            <section id="view-orders-section" class="user-section">
+                <h2>My Orders</h2>
+                <div id="order-list">
+                    <!-- Orders will be listed here -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <a href="index.html" class="footer-link">
+                <img src="images/logo.png" alt="Indian Foodie Logo">
+                <p>&copy; 2025 Indian Foodie — From Our Kitchen To Yours.</p>
+            </a>
+            <div class="footer-social">
+                <a href="https://www.facebook.com/" target="_blank"><i class='bx bxl-facebook'></i></a>
+                <a href="https://www.instagram.com/" target="_blank"><i class='bx bxl-instagram'></i></a>
+                <a href="https://x.com/" target="_blank"><i class='bx bxl-twitter'></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="firebase.js"></script>
+    <script src="user.js"></script>
+</body>
+
+</html>

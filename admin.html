@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Indian Foodie</title>
+    <!-- Box Icons -->
+    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Indian Foodie Logo"> Indian Foodie
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="catering.html" class="nav-link">Catering</a>
+                <a href="admin.html" class="nav-link active-link">Admin</a>
+                <a href="user.html" class="nav-link">User</a>
+                <a href="#" id="logout-nav" class="nav-link" style="display:none;">Logout</a>
+                <a href="#" class="cart-icon"><i class='bx bx-cart'></i></a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container admin-container">
+        <div id="auth-container" class="auth-container">
+            <h2>Admin Login</h2>
+            <form id="login-form" class="auth-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <hr>
+            <h2>Admin Register</h2>
+            <form id="register-form" class="auth-form">
+                <input type="email" id="register-email" placeholder="Email" required>
+                <input type="password" id="register-password" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+
+        <div id="admin-panel" class="admin-panel" style="display:none;">
+            <h1>Marketplace Dashboard</h1>
+            <a href="#" id="logout-btn" class="logout-btn">Logout</a>
+
+            <div id="profile-section">
+                <h2>My Profile</h2>
+                <div id="profile-details"></div>
+                <button id="edit-profile-btn">Edit Profile</button>
+                <form id="profile-form" style="display:none;">
+                    <input type="text" id="profile-name" placeholder="Name">
+                    <input type="text" id="profile-address" placeholder="Address">
+                    <button type="submit">Save Profile</button>
+                </form>
+            </div>
+
+            <div id="all-products-section">
+                <h2>All Dishes</h2>
+                <div id="all-product-list"></div>
+                <h2>Add a New Product</h2>
+                <form id="add-product-form">
+                    <input type="text" id="product-name" placeholder="Product Name" required>
+                    <input type="number" id="product-price" placeholder="Price" required>
+                    <textarea id="product-description" placeholder="Description"></textarea>
+                    <button type="submit">Add Product</button>
+                </form>
+            </div>
+
+            <div id="add-to-cart-section">
+                <h2>Manage Carts</h2>
+                <div id="cart-list"></div>
+            </div>
+
+            <div id="my-orders-section">
+                <h2>Manage Orders</h2>
+                <div id="order-list"></div>
+            </div>
+
+            <div id="place-order-section">
+                <h2>Create a New Order</h2>
+                <form id="place-order-form">
+                    <input type="text" id="order-user-id" placeholder="User ID" required>
+                    <input type="text" id="order-product-id" placeholder="Product ID" required>
+                    <input type="number" id="order-quantity" placeholder="Quantity" required>
+                    <button type="submit">Place Order</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <a href="index.html" class="footer-link">
+                <img src="images/logo.png" alt="Indian Foodie Logo">
+                <p>&copy; 2025 Indian Foodie — From Our Kitchen To Yours.</p>
+            </a>
+            <div class="footer-social">
+                <a href="https://www.facebook.com/" target="_blank"><i class='bx bxl-facebook'></i></a>
+                <a href="https://www.instagram.com/" target="_blank"><i class='bx bxl-instagram'></i></a>
+                <a href="https://x.com/" target="_blank"><i class='bx bxl-twitter'></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firebase.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

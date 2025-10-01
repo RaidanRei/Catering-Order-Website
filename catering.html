@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indian Catering - A Feast for Your Senses</title>
+    <!-- Box Icons -->
+    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <!-- Link CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/logo.png" alt="Indian Foodie Logo"> Indian Foodie
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="catering.html" class="nav-link active-link">Catering</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+                <a href="user.html" class="nav-link">User</a>
+                <a href="#" class="cart-icon"><i class='bx bx-cart'></i></a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Catering Section -->
+        <section class="catering-section">
+            <div class="catering-image">
+                <img src="https://turmericvictoria.com/images/popular-indian-dishes-blogs.png" alt="Catering Food">
+            </div>
+            <div class="catering-form-container">
+                <h3>REQUEST CATERING NOW</h3>
+                <h2>Tell us a little about your event and <br> we’ll help you coordinate it</h2>
+                <p>Call your local Indian Foodie location directly to place all platter pick up orders</p>
+
+                <form id="catering-form">
+                    <div class="form-row">
+                        <input type="text" id="name" placeholder="First Name*" required>
+                        <input type="text" id="last-name" placeholder="Last Name*" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" id="email" placeholder="Email Address*" required>
+                        <input type="tel" id="phone" placeholder="Phone Number*" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="date" id="date" placeholder="Event Date*" required>
+                        <input type="time" id="time" placeholder="Delivery/Pickup Time*" required>
+                    </div>
+                    <div class="form-row">
+                        <select id="menu" required>
+                            <option value="">Type of Catering*</option>
+                            <option value="buffet">Buffet Catering</option>
+                            <option value="plated">Plated Catering</option>
+                            <option value="family-style">Family Style Catering</option>
+                        </select>
+                        <input type="number" id="guests" placeholder="Guest Count*" min="1" required>
+                    </div>
+                    <div class="form-row">
+                        <select id="occasion" required>
+                            <option value="">Occasion*</option>
+                            <option value="birthday">Birthday</option>
+                            <option value="wedding">Wedding</option>
+                            <option value="wedding">Anniversary</option>
+                            <option value="birthday">Graduation</option>
+                            <option value="birthday">Holiday Celebration</option>
+                            <option value="corporate">Family Reunion</option>
+                            <option value="corporate">School Event</option>
+                            <option value="corporate">Work Event</option>
+                            <option value="corporate">Retirement Party</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <select id="pickup-delivery" required>
+                            <option value="">Pickup or Delivery?*</option>
+                            <option value="pickup">Pickup</option>
+                            <option value="delivery">Delivery</option>
+                        </select>
+                    </div>
+                    <div class="form-row form-row-textarea">
+                        <textarea id="requests" placeholder="Tell us what you'd like to order" rows="6"></textarea>
+                    </div>
+                    <button type="submit">Submit Request</button>
+                </form>
+            </div>
+        </section>
+        <hr class="section-divider">
+        <!-- Type of Catering -->
+        <section class="catering-types">
+            <div class="container">
+                <h2 class="catering-types-title">
+                    Choose the catering style that best suits your event.<br>We’ll take care of the rest!
+                </h2>
+                <div class="catering-types-grid">
+                    <!-- Buffet Catering -->
+                    <div class="catering-type-card">
+                        <img src="https://images.surferseo.art/85fcfba1-2287-4baa-a486-ba06bcb465fe.jpeg"
+                            alt="Buffet Catering">
+                        <h3 class="buffet">Buffet Catering</h3>
+                        <p>A classic catering option where guests serve themselves from a wide variety of dishes.
+                            Perfect for large gatherings.</p>
+                        <p><small>Minimum 20 guests · 48 hour notice</small></p>
+                    </div>
+                    <!-- Plated Catering -->
+                    <div class="catering-type-card">
+                        <img src="https://static1.squarespace.com/static/56c0b729555986b9cd6b2491/t/5c61859d9b747a2840874180/1549895089829/?format=1500w"
+                            alt="Plated Catering">
+                        <h3 class="plated">Plated Catering</h3>
+                        <p>A more formal experience with individually plated meals served to each guest at their table.
+                        </p>
+                        <p><small>Minimum 25 guests · 72 hour notice</small></p>
+                    </div>
+                    <!-- Family-Style Catering -->
+                    <div class="catering-type-card">
+                        <img src="https://static.vecteezy.com/system/resources/thumbnails/030/963/115/small_2x/indian-family-having-dinner-together-at-home-in-the-evening-india-on-bokeh-background-generative-ai-photo.jpg"
+                            alt="Family-Style Catering">
+                        <h3 class="family">Family-Style Catering</h3>
+                        <p>Dishes are served at each table for guests to share, creating a warm and communal dining
+                            experience.</p>
+                        <p><small>Minimum 15 guests · 48 hour notice</small></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container footer-content">
+            <a href="index.html" class="footer-link">
+                <img src="images/logo.png" alt="Indian Foodie Logo">
+                <p>&copy; 2025 Indian Foodie — From Our Kitchen To Yours.</p>
+            </a>
+            <div class="footer-social">
+                <a href="https://www.facebook.com/" target="_blank"><i class='bx bxl-facebook'></i></a>
+                <a href="https://www.instagram.com/" target="_blank"><i class='bx bxl-instagram'></i></a>
+                <a href="https://x.com/" target="_blank"><i class='bx bxl-twitter'></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firebase.js"></script>
+    <script src="catering.js"></script>
+</body>
+
+</html>
