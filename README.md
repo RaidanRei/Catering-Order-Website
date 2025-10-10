@@ -61,7 +61,7 @@ The project supports **Admin and User** roles with separate dashboards, dynamic 
 
 `js`
 // Admin (for first-time login)
-Email: admin@catering.com
+Email: admin@demo.com
 Password: admin123
 
 // User (default demo)
@@ -89,7 +89,7 @@ Collapsible cart sidebar on smaller screens.
 
 🚀 Getting Started
 1️⃣ Clone or Download
-git clone https://github.com/yourusername/catering-localstorage.git
+git clone https://github.com/RaidanRei/Catering-Reservation-and-Ordering-System.git
 
 2️⃣ Open in Browser
 Simply open index.html in any modern browser.
