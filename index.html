@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Foodie - A Taste of India</title>
-    <!-- Box Icons -->
+    <!-- ===== ICONS & CSS ===== -->
+    <!-- Boxicons for UI icons -->
     <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
-    <!-- Link CSS -->
+    <!-- Main CSS stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!-- ===== HEADER / NAVBAR ===== -->
+    <!-- Contains logo, navigation links and cart icon with active page highlighting -->
     <header>
         <div class="container">
             <a href="index.html" class="logo">
@@ -22,6 +25,7 @@
                 <a href="catering.html" class="nav-link">Catering</a>
                 <a href="admin.html" class="nav-link">Admin</a>
                 <a href="user.html" class="nav-link">User</a>
+                <!-- Cart icon with item count badge -->
                 <a href="#" class="cart-icon">
                     <i class='bx bx-cart'></i>
                     <span class="cart-count">0</span>
@@ -30,14 +34,15 @@
         </div>
     </header>
 
-    <!-- Cart Sidebar -->
+    <!-- ===== CART SIDEBAR ===== -->
+    <!-- Displays user cart with total and checkout button -->
     <div class="cart-sidebar" id="cart-sidebar">
         <div class="cart-header">
             <h3>Your Cart</h3>
             <i class='bx bx-x' id="close-cart"></i>
         </div>
         <div class="cart-items">
-            <!-- Cart items will be added here -->
+            <!-- Cart items will be dynamically added here -->
         </div>
         <div class="cart-footer">
             <div class="cart-total">
@@ -48,8 +53,10 @@
         </div>
     </div>
 
+    <!-- ===== MAIN CONTENT ===== -->
     <main>
-        <!-- Hero Section -->
+        <!-- === HERO SECTION === -->
+        <!-- Intro banner for the website -->
         <section class="hero">
             <div class="hero-content container">
                 <h1>Welcome to Indian Foodie</h1>
@@ -60,7 +67,8 @@
                 </div>
             </div>
         </section>
-        <!-- Features Section -->
+        <!-- === FEATURES SECTION === -->
+        <!-- Highlights unique selling points of the platform -->
         <section class="features container">
             <h2>Why Choose Indian Foodie?</h2>
             <div class="feature-cards">
@@ -81,11 +89,13 @@
             </div>
         </section>
         <hr class="section-divider">
-        <!-- Menu Section -->
+        <!-- === MENU SECTION === -->
+        <!-- Weekly special dishes displayed in a grid layout -->
         <section class="menu section bd-container" id="menu">
             <span class="section-subtitle">Special</span>
             <h2 class="section-title">Menu Of The Week</h2>
             <div class="menu__container bd-grid">
+                <!-- Individual dish cards -->
                 <div class="menu__content">
                     <img src="Images/plate1.png" alt="" class="menu__img">
                     <h3 class="menu__name">Hyderabadi Biryani</h3>
@@ -132,6 +142,8 @@
         </section>
     </main>
 
+    <!-- ===== FOOTER ===== -->
+    <!-- Includes brand info and social media links -->
     <footer>
         <div class="container footer-content">
             <a href="index.html" class="footer-link">
@@ -146,11 +158,35 @@
         </div>
     </footer>
 
+    <!-- ===== SCRIPT SECTION ===== -->
+    <!-- Adds logout logic and links cart.js functionality -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const nav = document.querySelector("nav"); // pakai nav yang sudah ada
+
+            if (currentUser && nav) {
+                // Create Logout button dynamically
+                const logoutLink = document.createElement("a");
+                logoutLink.href = "#";
+                logoutLink.textContent = "Logout";
+                logoutLink.id = "logout-link";
+
+                // Append to navbar
+                nav.appendChild(logoutLink);
+
+                // Logout click event
+                logoutLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem("currentUser");
+                    alert("You have logged out!");
+                    window.location.href = "index.html";
+                });
+            }
+        });
+    </script>
+
     <!-- Link JS -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="firebase.js"></script>
     <script src="cart.js"></script>
 </body>
 

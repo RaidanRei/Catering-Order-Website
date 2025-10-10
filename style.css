@@ -1,19 +1,24 @@
-/* General Body Styles */
+/* === GLOBAL BODY STYLES === */
+/* Defines base typography, layout, and color scheme */
 body {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     line-height: 1.6;
     background-color: #F5F5DC;
+    /* Warm beige background */
     color: #333333;
     margin: 0;
 }
 
+/* === CONTAINER WRAPPER === */
+/* Centers content with max width and side padding */
 .container {
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* Header */
+/* === HEADER SECTION === */
+/* Sticky header with shadow for depth */
 header {
     background: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -29,7 +34,8 @@ header .container {
     align-items: center;
 }
 
-/* Header Logo */
+/* === HEADER LOGO === */
+/* Displays brand logo and name */
 .logo,
 .footer-logo {
     display: flex;
@@ -44,12 +50,17 @@ header .container {
     color: #FF9933;
 }
 
+/* === NAVIGATION LINKS === */
+/* Aligns nav items horizontally */
 .nav-links {
     display: flex;
     gap: 20px;
     align-items: center;
 }
 
+/* === NAVIGATION LINK STYLE === */
+/* Smooth saffron hover transition */
+nav a,
 .nav-link {
     text-decoration: none;
     color: #555;
@@ -57,10 +68,13 @@ header .container {
     transition: color 0.3s ease;
 }
 
+nav a:hover,
 .nav-link:hover {
     color: #FF9933;
 }
 
+/* === CART ICON STYLE === */
+/* Saffron hover and notification badge */
 .cart-icon {
     text-decoration: none;
     color: #555;
@@ -73,6 +87,8 @@ header .container {
     color: #FF9933;
 }
 
+/* === CART ITEM COUNT BADGE === */
+/* Circular saffron badge positioned top-right */
 .cart-count {
     position: absolute;
     top: -8px;
@@ -88,18 +104,18 @@ header .container {
     justify-content: center;
     align-items: center;
     line-height: 20px;
-    /* Add this for vertical centering */
     text-align: center;
-    /* Add this for horizontal centering */
     display: none;
     /* Hidden by default */
 }
 
+/* === ACTIVE NAV LINK === */
 .active-link {
     color: #FF9933;
 }
 
-/* Section Divider */
+/* === SECTION DIVIDER === */
+/* Gradient horizontal divider line */
 .section-divider {
     width: 80%;
     margin: 40px auto;
@@ -108,7 +124,8 @@ header .container {
     background: linear-gradient(to right, transparent, #ccc, transparent);
 }
 
-/* Hero Section */
+/* === HERO SECTION === */
+/* Large banner with overlay and centered text */
 .hero {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://turmericvictoria.com/images/popular-indian-dishes-blogs.png');
     background-size: cover;
@@ -130,6 +147,8 @@ header .container {
     text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
 }
 
+/* === HERO BUTTONS === */
+/* Primary and secondary CTAs with smooth transition */
 .hero-buttons .btn {
     text-decoration: none;
     padding: 1rem 2rem;
@@ -140,6 +159,7 @@ header .container {
     display: inline-block;
 }
 
+/* === BUTTON VARIANTS === */
 .btn-primary {
     background-color: #fff;
     color: #FF9933;
@@ -162,7 +182,8 @@ header .container {
     color: #FF9933;
 }
 
-/* Features Section */
+/* === FEATURES SECTION === */
+/* Displays feature cards under hero */
 .features {
     padding: 60px 0;
     text-align: center;
@@ -174,12 +195,16 @@ header .container {
     color: #333;
 }
 
+/* === FEATURE CARD GRID === */
+/* Uses auto-fit layout for responsiveness */
 .feature-cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
+/* === FEATURE CARD STYLE === */
+/* White cards with saffron headers and hover lift effect */
 .card {
     background: #fff;
     padding: 30px;
@@ -197,16 +222,19 @@ header .container {
 .card h3 {
     font-size: 1.5rem;
     color: #FF9933;
+    /* Saffron heading */
     margin-bottom: 1rem;
 }
 
-/* Menu Section */
+/* === MENU SECTION === */
+/* Displays food menu with saffron accent titles and hover scaling */
 .menu {
     background-color: #F5F5DC;
     padding: 60px 20px;
     text-align: center;
 }
 
+/* === MENU TITLES === */
 .menu .section-subtitle {
     color: #FF9933;
     font-weight: bold;
@@ -221,6 +249,7 @@ header .container {
     margin-bottom: 40px;
 }
 
+/* === MENU GRID LAYOUT === */
 .menu__container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -228,6 +257,7 @@ header .container {
     justify-content: center;
 }
 
+/* === MENU ITEM CARD === */
 .menu__content {
     background: #fff;
     border-radius: 12px;
@@ -242,6 +272,7 @@ header .container {
     transform: translateY(-5px);
 }
 
+/* === MENU IMAGE === */
 .menu__img {
     width: 120px;
     height: 120px;
@@ -251,6 +282,7 @@ header .container {
     display: block;
 }
 
+/* === MENU TEXT DETAILS === */
 .menu__name {
     font-size: 1.2rem;
     font-weight: 700;
@@ -264,18 +296,21 @@ header .container {
     margin-bottom: 10px;
 }
 
+/* === MENU PRICE === */
 .menu__preci {
     font-weight: 700;
     color: #FF9933;
     font-size: 1rem;
 }
 
+/* === ADD TO CART BUTTON === */
 .menu__button {
     position: static;
     /* remove absolute */
     margin-top: 15px;
     /* add spacing from price */
     background: #FF9933;
+    /* saffron base */
     color: #fff;
     border-radius: 8px;
     padding: 8px 12px;
@@ -287,9 +322,11 @@ header .container {
 
 .menu__button:hover {
     background: #cc7a29;
+    /* darker saffron on hover */
 }
 
-/* Footer */
+/* === FOOTER SECTION === */
+/* Dark brown background with saffron hover social icons */
 footer {
     background: #8B4513;
     color: #fff;
@@ -298,6 +335,7 @@ footer {
     margin-top: 40px;
 }
 
+/* === FOOTER CONTENT LAYOUT === */
 .footer-content {
     display: flex;
     align-items: center;
@@ -308,6 +346,7 @@ footer {
     gap: 20px;
 }
 
+/* === FOOTER LINKS === */
 .footer-link {
     display: flex;
     align-items: center;
@@ -328,7 +367,7 @@ footer {
     color: #fff;
 }
 
-/* Social Media Icons */
+/* === SOCIAL ICONS === */
 .footer-social {
     display: flex;
     gap: 15px;
@@ -345,7 +384,8 @@ footer {
     transform: scale(1.2);
 }
 
-/* Catering Page Section */
+/* === CATERING MAIN SECTION === */
+/* Flex layout with image and form columns */
 .catering-section {
     display: flex;
     align-items: stretch;
@@ -356,12 +396,11 @@ footer {
     overflow: hidden;
 }
 
-/* Catering Image */
+/* === CATERING IMAGE COLUMN === */
 .catering-image {
     flex: 0.8;
     /* smaller than form */
     max-width: 40%;
-    /* image column ~40% */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -376,7 +415,7 @@ footer {
     border-radius: 10px;
 }
 
-/* Catering Form side */
+/* === CATERING FORM COLUMN === */
 .catering-form-container {
     flex: 1.2;
     /* give more space to form */
@@ -409,6 +448,7 @@ footer {
     color: #555;
 }
 
+/* === CATERING FORM ELEMENTS === */
 #catering-form {
     display: flex;
     flex-direction: column;
@@ -432,11 +472,13 @@ footer {
     outline: none;
 }
 
+/* === PLACEHOLDER COLOR === */
 .form-row input::placeholder,
 .form-row select {
     color: #666;
 }
 
+/* === TEXTAREA STYLE === */
 .form-row-textarea {
     grid-column: 1 / -1;
     /* span full width if inside grid */
@@ -456,6 +498,7 @@ footer {
     resize: vertical;
 }
 
+/* === SUBMIT BUTTON (CATERING) === */
 #catering-form button {
     margin-top: 20px;
     padding: 14px;
@@ -472,7 +515,7 @@ footer {
     background: #cc7a29;
 }
 
-/* Section Divider */
+/* === SECTION DIVIDER REUSE === */
 .section-divider {
     width: 80%;
     margin: 40px auto;
@@ -481,7 +524,8 @@ footer {
     background: linear-gradient(to right, transparent, #ccc, transparent);
 }
 
-/* Catering Types Section (3 cards) */
+/* === CATERING TYPE CARDS === */
+/* Three responsive cards for buffet, plated, and family style */
 .catering-types {
     background-color: #F5F5DC;
     padding: 60px 20px;
@@ -495,12 +539,14 @@ footer {
     margin-bottom: 40px;
 }
 
+/* === CATERING GRID LAYOUT === */
 .catering-types-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 30px;
 }
 
+/* === CATERING CARD === */
 .catering-type-card {
     background: #fff;
     border-radius: 12px;
@@ -529,17 +575,20 @@ footer {
     font-weight: 700;
 }
 
+/* === COLOR VARIANTS FOR CARD TITLES === */
 .catering-type-card h3.buffet {
     color: #d58b00;
+    /* saffron-gold tone */
 }
 
-/* saffron */
 .catering-type-card h3.plated {
     color: #008c7a;
+    /* teal tone */
 }
 
 .catering-type-card h3.family {
     color: #b60000;
+    /* crimson tone */
 }
 
 .catering-type-card p {
@@ -548,7 +597,8 @@ footer {
     margin-bottom: 8px;
 }
 
-/* Admin Page Specific Styles */
+/* === ADMIN CONTAINER === */
+/* White card layout with saffron gradient buttons */
 .admin-container {
     max-width: 800px;
     margin: 40px auto;
@@ -574,6 +624,21 @@ footer {
     padding-bottom: 10px;
 }
 
+.admin-container p {
+    font-size: 13px;
+    margin-top: 10px;
+    color: #666;
+    gap: 15px;
+}
+
+/* === ADD PRODUCT FORM === */
+#add-product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* === AUTH FORM INPUTS === */
 .auth-form input[type="email"],
 .auth-form input[type="password"] {
     width: 100%;
@@ -585,30 +650,51 @@ footer {
     box-sizing: border-box;
 }
 
-.auth-form button {
+/* === FOCUS HIGHLIGHT === */
+.admin-container input:focus {
+    border-color: #ff9933;
+    box-shadow: 0 0 6px rgba(255, 153, 51, 0.4);
+}
+
+/* === LOGIN & REGISTER BUTTONS === */
+.login,
+.register {
     width: 100%;
     padding: 1rem;
     border: none;
-    background-color: #FF9933;
-    color: white;
     border-radius: 5px;
-    cursor: pointer;
     font-size: 1rem;
     font-weight: 600;
-    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
-.auth-form button:hover {
-    background-color: #cc7a29;
+/* === ADMIN BUTTON STYLE === */
+.admin-container button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ff9933, #cc7a00);
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
+.admin-container button:hover {
+    background: linear-gradient(135deg, #cc7a00, #b35c00);
+    transform: translateY(-2px);
+}
+
+/* === LOGOUT BUTTON === */
+/* Saffron gradient with hover lift effect */
 .logout-btn {
     display: block;
-    width: 150px;
+    width: 100px;
     margin: 20px auto;
     padding: 1rem;
     border: none;
-    background-color: #d9534f;
+    background: linear-gradient(135deg, #ff9933, #cc7a00);
     color: white;
     border-radius: 5px;
     cursor: pointer;
@@ -616,17 +702,263 @@ footer {
     font-weight: 600;
     text-align: center;
     text-decoration: none;
-    transition: background-color 0.3s ease;
+    transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .logout-btn:hover {
-    background-color: #c9302c;
+    background: linear-gradient(135deg, #cc7a00, #b35c00);
+    transform: translateY(-2px);
 }
 
 .admin-panel>div {
     margin-bottom: 30px;
 }
 
+/* === ALL PRODUCT LIST GRID === */
+/* Displays all uploaded products with saffron border-top */
+#all-product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+#all-product-list .product {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-top: 4px solid #ff9933;
+}
+
+#all-product-list .product:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* === PRODUCT TITLE === */
+#all-product-list .product h3 {
+    color: #cc7a00;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* === PRODUCT TEXT === */
+#all-product-list .product p {
+    font-size: 0.95rem;
+    color: #666;
+    margin: 4px 0;
+}
+
+/* === PRODUCT BUTTON === */
+#all-product-list .product button {
+    margin-top: 10px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #ff9933;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#all-product-list .product button:hover {
+    background: #cc7a00;
+    transform: translateY(-2px);
+}
+
+/* === PRODUCT PRICE === */
+/* Crimson red color with shimmer effect on hover */
+#all-product-list .product p.price {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #cc3300;
+    margin-top: 8px;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+
+#all-product-list .product:hover p.price {
+    position: relative;
+    color: #e63900;
+    text-shadow: 0 0 8px rgba(230, 57, 0, 0.5);
+    overflow: hidden;
+}
+
+/* === PRICE SHIMMER ANIMATION === */
+#all-product-list .product:hover p.price::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0) 100%);
+    animation: shimmer 1s ease-in-out forwards;
+}
+
+/* === SHIMMER KEYFRAMES === */
+@keyframes shimmer {
+    from {
+        left: -100%;
+    }
+
+    to {
+        left: 100%;
+    }
+}
+
+/* === ORDER LIST GRID === */
+/* Displays customer orders with saffron border highlight */
+#order-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+#order-list .order-item {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-top: 4px solid #ff9933;
+}
+
+#order-list .order-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+}
+
+#order-list .order-item p {
+    margin: 5px 0;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+#order-list .order-item strong {
+    color: #cc7a00;
+}
+
+/* === ORDER SECTION HEADER === */
+#order-list h3 {
+    text-align: center;
+    color: #ff9933;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+/* === DELETE BUTTON IN ORDER LIST === */
+#order-list .order-item button {
+    margin-top: 10px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    background: #ff9933;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#order-list .order-item button:hover {
+    background: #cc7a00;
+    transform: translateY(-2px);
+}
+
+/* === PLACE ORDER FORM === */
+/* Centralized card layout with fade-in animation */
+#place-order-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 40px auto;
+    background: #fff;
+    padding: 40px 50px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    animation: fadeInUp 0.6s ease both;
+}
+
+#place-order-form h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* === FORM ELEMENTS === */
+#place-order-form input,
+#place-order-form textarea,
+#place-order-form select {
+    width: 100%;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* === FOCUS EFFECT === */
+#place-order-form input:focus,
+#place-order-form textarea:focus,
+#place-order-form select:focus {
+    border-color: #FF9933;
+    box-shadow: 0 0 6px rgba(255, 153, 51, 0.3);
+}
+
+/* === SUBMIT BUTTON === */
+#place-order-form button {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, #ff9933, #cc7a00);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#place-order-form button:hover {
+    background: linear-gradient(135deg, #cc7a00, #b35c00);
+    transform: translateY(-2px);
+}
+
+/* === FADE-IN ANIMATION === */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================
+   🧑‍💻 USER DASHBOARD SECTION
+   ========================================= */
+
+/* === AUTH CONTAINER (Login/Register Card) === */
 .user-container #auth-container {
     max-width: 400px;
     margin: 40px auto;
@@ -642,6 +974,7 @@ footer {
     margin-bottom: 1.5rem;
 }
 
+/* === FORM INPUTS === */
 .user-container #auth-container form {
     display: flex;
     flex-direction: column;
@@ -655,6 +988,7 @@ footer {
     font-size: 1rem;
 }
 
+/* === AUTH BUTTON === */
 .user-container #auth-container button {
     padding: 1rem;
     background: #FF9933;
@@ -670,7 +1004,7 @@ footer {
     background: #cc7a29;
 }
 
-/* User Dashboard */
+/* === DASHBOARD PANEL === */
 .user-container #user-panel {
     padding: 40px 0;
 }
@@ -682,6 +1016,7 @@ footer {
     margin-bottom: 2rem;
 }
 
+/* === LOGOUT BUTTON === */
 .user-container #logout-btn {
     display: block;
     margin: 0 auto 30px;
@@ -699,7 +1034,7 @@ footer {
     background: #c82333;
 }
 
-/* Section Styling */
+/* === USER SECTIONS (Upload, My Products, Orders) === */
 .user-container .user-section {
     background: #fff;
     padding: 30px;
@@ -715,7 +1050,7 @@ footer {
     margin-bottom: 20px;
 }
 
-/* Form Styling for Upload */
+/* === UPLOAD FORM === */
 .user-container #upload-form {
     display: flex;
     flex-direction: column;
@@ -732,7 +1067,7 @@ footer {
 
 .user-container #upload-form button {
     padding: 1rem;
-    background: #28a745;
+    background: #FF9933;
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -742,10 +1077,10 @@ footer {
 }
 
 .user-container #upload-form button:hover {
-    background: #218838;
+    background: #cc7a29;
 }
 
-/* Product & Order Lists */
+/* === PRODUCT & ORDER LISTS === */
 .user-container #my-product-list,
 .user-container #order-list {
     display: grid;
@@ -767,7 +1102,11 @@ footer {
     margin-top: 0;
 }
 
-/* Cart Sidebar */
+/* =========================================
+   🛒 CART SIDEBAR STYLING
+   ========================================= */
+
+/* === SIDEBAR BASE === */
 .cart-sidebar {
     position: fixed;
     top: 0;
@@ -783,9 +1122,9 @@ footer {
     flex-direction: column;
 }
 
+/* === ACTIVE STATE === */
 .cart-sidebar.active {
     right: 0;
-    /* Appears when active */
 }
 
 .cart-header {
@@ -813,13 +1152,14 @@ footer {
     color: #333;
 }
 
+/* === CART ITEMS SCROLLABLE AREA === */
 .cart-items {
     flex-grow: 1;
     overflow-y: auto;
     padding: 20px;
 }
 
-/* Cart Item */
+/* === CART ITEM === */
 .cart-item {
     display: flex;
     align-items: center;
@@ -849,6 +1189,7 @@ footer {
     color: #FF9933;
 }
 
+/* === REMOVE ICON === */
 .cart-item-remove {
     font-size: 1.2rem;
     cursor: pointer;
@@ -860,6 +1201,7 @@ footer {
     color: #dc3545;
 }
 
+/* === CART FOOTER === */
 .cart-footer {
     padding: 20px;
     border-top: 1px solid #eee;
@@ -879,7 +1221,7 @@ footer {
     text-align: center;
 }
 
-/* Checkout Button */
+/* === CHECKOUT BUTTON === */
 .checkout-btn {
     background-color: #FF9933;
     color: #fff;
@@ -896,7 +1238,9 @@ footer {
     background-color: #cc7a29;
 }
 
-/* Responsive */
+/* =========================================
+   📱 RESPONSIVE DESIGN
+   ========================================= */
 @media (max-width: 768px) {
     header .container {
         flex-direction: column;
@@ -924,6 +1268,7 @@ footer {
         text-align: center;
     }
 
+    /* === CATERING PAGE ADJUST === */
     .catering-section {
         flex-direction: column;
     }
@@ -941,6 +1286,7 @@ footer {
         padding: 20px;
     }
 
+    /* === CART FULL WIDTH ON MOBILE === */
     .cart-sidebar {
         width: 100%;
         right: -100%;
@@ -950,6 +1296,7 @@ footer {
         right: 0;
     }
 
+    /* === FOOTER STACK === */
     .footer-content {
         flex-direction: column;
         text-align: center;
@@ -1024,6 +1371,7 @@ footer {
     }
 }
 
+/* === GRID ADJUSTMENTS ON TABLET+ === */
 @media screen and (min-width: 768px) {
     .menu__container {
         grid-template-columns: repeat(3, 210px);

@@ -5,13 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Indian Catering - A Feast for Your Senses</title>
-    <!-- Box Icons -->
+    <!-- ===== ICONS & CSS ===== -->
+    <!-- Boxicons for UI icons -->
     <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
-    <!-- Link CSS -->
+    <!-- Main CSS stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+    <!-- ===== HEADER / NAVBAR ===== -->
+    <!-- Contains logo and navigation links with active page highlighting -->
     <header>
         <div class="container">
             <a href="index.html" class="logo">
@@ -22,13 +25,14 @@
                 <a href="catering.html" class="nav-link active-link">Catering</a>
                 <a href="admin.html" class="nav-link">Admin</a>
                 <a href="user.html" class="nav-link">User</a>
-                <a href="#" class="cart-icon"><i class='bx bx-cart'></i></a>
             </nav>
         </div>
     </header>
 
+    <!-- ===== MAIN SECTION ===== -->
     <main>
-        <!-- Catering Section -->
+        <!-- === CATERING SECTION === -->
+        <!-- Event request form for users to submit catering details -->
         <section class="catering-section">
             <div class="catering-image">
                 <img src="https://turmericvictoria.com/images/popular-indian-dishes-blogs.png" alt="Catering Food">
@@ -37,7 +41,7 @@
                 <h3>REQUEST CATERING NOW</h3>
                 <h2>Tell us a little about your event and <br> we’ll help you coordinate it</h2>
                 <p>Call your local Indian Foodie location directly to place all platter pick up orders</p>
-
+                <!-- Catering Form -->
                 <form id="catering-form">
                     <div class="form-row">
                         <input type="text" id="name" placeholder="First Name*" required>
@@ -88,7 +92,8 @@
             </div>
         </section>
         <hr class="section-divider">
-        <!-- Type of Catering -->
+        <!-- === TYPES OF CATERING === -->
+        <!-- Displays various catering service options -->
         <section class="catering-types">
             <div class="container">
                 <h2 class="catering-types-title">
@@ -127,6 +132,8 @@
         </section>
     </main>
 
+    <!-- ===== FOOTER ===== -->
+    <!-- Includes brand info and social media links -->
     <footer>
         <div class="container footer-content">
             <a href="index.html" class="footer-link">
@@ -141,10 +148,35 @@
         </div>
     </footer>
 
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="firebase.js"></script>
+    <!-- ===== LOGOUT SCRIPT ===== -->
+    <!-- Adds dynamic logout button for logged-in users -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+            const nav = document.querySelector("nav"); // pakai nav yang sudah ada
+
+            if (currentUser && nav) {
+                // Buat tombol Logout
+                const logoutLink = document.createElement("a");
+                logoutLink.href = "#";
+                logoutLink.textContent = "Logout";
+                logoutLink.id = "logout-link";
+
+                // Masukkan ke navbar
+                nav.appendChild(logoutLink);
+
+                // Event klik logout
+                logoutLink.addEventListener("click", (e) => {
+                    e.preventDefault();
+                    localStorage.removeItem("currentUser");
+                    alert("You have logged out!");
+                    window.location.href = "catering.html";
+                });
+            }
+        });
+    </script>
+
+    <!-- Link JS -->
     <script src="catering.js"></script>
 </body>
 

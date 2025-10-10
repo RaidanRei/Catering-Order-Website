@@ -1,4 +1,11 @@
+// ========================= CART.JS =========================
+// Handles shopping cart UI, localStorage syncing, and checkout process
+// for both user and admin dashboards. Keeps data persistent.
+// ============================================================
+
 document.addEventListener("DOMContentLoaded", () => {
+  // ===== DOM ELEMENT REFERENCES =====
+  // Select key UI elements for the cart interface
   const cartIcon = document.querySelector(".cart-icon");
   const cartSidebar = document.getElementById("cart-sidebar");
   const closeCart = document.getElementById("close-cart");
@@ -8,60 +15,63 @@ document.addEventListener("DOMContentLoaded", () => {
   const cartCount = document.querySelector(".cart-count");
   const checkoutButton = document.querySelector(".checkout-btn");
 
-  // Function to open the cart sidebar
-  const openCart = () => {
-    if (cartSidebar) {
-      cartSidebar.classList.add("active");
-    }
-  };
+  // ===== LOCALSTORAGE HELPERS =====
+  // Utility functions for reading and writing cart data
+  function getCart() {
+    return JSON.parse(localStorage.getItem("cart")) || [];
+  }
+  function saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }
 
-  // Function to close the cart sidebar
-  const closeCartSidebar = () => {
-    if (cartSidebar) {
-      cartSidebar.classList.remove("active");
-    }
-  };
+  // ===== SIDEBAR TOGGLE =====
+  // Opens and closes the shopping cart sidebar
+  const openCart = () => cartSidebar.classList.add("active");
+  const closeCartSidebar = () => cartSidebar.classList.remove("active");
 
-  // Function to update the cart total
-  const updateCartTotal = () => {
-    const cartItems = cartItemsContainer.querySelectorAll(".cart-item");
+  // ===== UPDATE CART DISPLAY =====
+  // Renders cart items, updates total price, and badge count
+  function updateCartDisplay() {
+    const cart = getCart();
+    cartItemsContainer.innerHTML = "";
     let total = 0;
-    cartItems.forEach((item) => {
-      const priceElement = item.querySelector(
-        ".cart-item-info span:last-child"
-      );
-      const price = parseFloat(priceElement.textContent.replace("₹", ""));
-      total += price;
+
+    cart.forEach((item, idx) => {
+      total += parseFloat(item.price.replace("₹", ""));
+
+      const cartItem = document.createElement("div");
+      cartItem.classList.add("cart-item");
+      cartItem.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+        <div class="cart-item-info">
+            <span>${item.name}</span>
+            <span>${item.price}</span>
+        </div>
+        <i class='bx bx-x cart-item-remove' data-idx="${idx}"></i>
+      `;
+      cartItemsContainer.appendChild(cartItem);
     });
+
     cartTotalPrice.textContent = `₹${total}`;
-  };
+    cartCount.textContent = cart.length;
+    cartCount.style.display = cart.length > 0 ? "flex" : "none";
+  }
 
-  // Function to update the cart count
-  const updateCartCount = () => {
-    const cartItems = cartItemsContainer.querySelectorAll(".cart-item");
-    const count = cartItems.length;
-    cartCount.textContent = count;
-    cartCount.style.display = count > 0 ? "flex" : "none";
-  };
-
-  // Event listener for toggling the cart
+  // ===== EVENT HANDLERS =====
+  // Toggles sidebar visibility when clicking the cart icon
   if (cartIcon) {
     cartIcon.addEventListener("click", (e) => {
       e.preventDefault();
-      if (cartSidebar.classList.contains("active")) {
-        closeCartSidebar();
-      } else {
-        openCart();
-      }
+      cartSidebar.classList.contains("active")
+        ? closeCartSidebar()
+        : openCart();
     });
   }
 
-  // Event listener for closing the cart
-  if (closeCart) {
-    closeCart.addEventListener("click", closeCartSidebar);
-  }
-
-  // Event listeners for adding items to the cart
+  // Closes the sidebar when clicking the close button
+  if (closeCart) closeCart.addEventListener("click", closeCartSidebar);
+  // ===== ADD TO CART =====
+  // Adds selected menu items to the cart and updates the display
   addToCartButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
       e.preventDefault();
@@ -70,50 +80,53 @@ document.addEventListener("DOMContentLoaded", () => {
       const itemPrice = menuItem.querySelector(".menu__preci").textContent;
       const itemImage = menuItem.querySelector(".menu__img").src;
 
-      addItemToCart(itemName, itemPrice, itemImage);
+      let cart = getCart();
+      cart.push({ name: itemName, price: itemPrice, image: itemImage });
+      saveCart(cart);
+      updateCartDisplay();
     });
   });
 
-  // Function to add an item to the cart
-  function addItemToCart(name, price, imageSrc) {
-    const cartItem = document.createElement("div");
-    cartItem.classList.add("cart-item");
-    cartItem.innerHTML = `
-            <img src="${imageSrc}" alt="${name}" class="cart-item-img">
-            <div class="cart-item-info">
-                <span>${name}</span>
-                <span>${price}</span>
-            </div>
-            <i class='bx bx-x cart-item-remove'></i>
-        `;
-    cartItemsContainer.appendChild(cartItem);
+  // ===== REMOVE ITEM FROM CART =====
+  // Deletes selected item from the cart by index
+  cartItemsContainer.addEventListener("click", (e) => {
+    if (e.target.classList.contains("cart-item-remove")) {
+      const idx = e.target.dataset.idx;
+      let cart = getCart();
+      cart.splice(idx, 1);
+      saveCart(cart);
+      updateCartDisplay();
+    }
+  });
 
-    // Add event listener to the remove button
-    cartItem
-      .querySelector(".cart-item-remove")
-      .addEventListener("click", () => {
-        cartItem.remove();
-        updateCartTotal();
-        updateCartCount();
-      });
-
-    updateCartTotal();
-    updateCartCount();
-  }
-
-  // Event listener for the checkout button
+  // ===== PLACE ORDER / CHECKOUT =====
+  // Converts cart items into orders and clears the cart
   if (checkoutButton) {
     checkoutButton.addEventListener("click", () => {
-      // Check if user is logged in (using Firebase Auth)
-      if (firebase.auth().currentUser) {
-        // User is logged in, proceed with checkout
-        console.log("User is logged in, proceeding to checkout...");
-        // You can add your checkout logic here
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      if (currentUser && currentUser.role === "user") {
+        let cart = getCart();
+        let orders = JSON.parse(localStorage.getItem("orders")) || [];
+        cart.forEach((item) => {
+          orders.push({
+            userId: currentUser.email,
+            productId: item.name,
+            quantity: 1,
+            status: "placed",
+          });
+        });
+        localStorage.setItem("orders", JSON.stringify(orders));
+        localStorage.removeItem("cart");
+        updateCartDisplay();
+        alert("Checkout successful! Orders have been placed.");
       } else {
-        // User is not logged in, redirect to user.html
-        alert("Please log in to proceed with checkout.");
+        alert("Please log in as User to proceed with checkout.");
         window.location.href = "user.html";
       }
     });
   }
+
+  // ===== INITIAL LOAD =====
+  // Renders the cart state when the page is first loaded
+  updateCartDisplay();
 });

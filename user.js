@@ -1,4 +1,11 @@
-// DOM Elements
+// ========================= USER.JS =========================
+// This script manages user authentication, product browsing,
+// cart management, order placement, and profile data using localStorage.
+// It connects with the same data structure used by admin.js.
+// ============================================================
+
+// ===== DOM ELEMENT REFERENCES =====
+// Grabbing references for forms, buttons, and sections in user.html
 const authContainer = document.getElementById("auth-container");
 const userPanel = document.getElementById("user-panel");
 const loginForm = document.getElementById("login-form");
@@ -14,171 +21,232 @@ const registerPassword = document.getElementById("register-password");
 const productName = document.getElementById("product-name");
 const productDescription = document.getElementById("product-description");
 const productPrice = document.getElementById("product-price");
-const productImage = document.getElementById("product-image");
 
+// Product elements for displaying user's products and orders
 const myProductList = document.getElementById("my-product-list");
 const orderList = document.getElementById("order-list");
 
-// ✅ Firebase objects (auth, db, storage) come from firebase.js
+// ===== LOCALSTORAGE HELPERS =====
+// Functions to get and set data (accounts, products, orders) from localStorage
+function getAccounts() {
+  return JSON.parse(localStorage.getItem("accounts")) || [];
+}
+function saveAccounts(accounts) {
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+}
+function getProducts() {
+  return JSON.parse(localStorage.getItem("products")) || [];
+}
+function saveProducts(products) {
+  localStorage.setItem("products", JSON.stringify(products));
+}
+function getOrders() {
+  return JSON.parse(localStorage.getItem("orders")) || [];
+}
+function saveOrders(orders) {
+  localStorage.setItem("orders", JSON.stringify(orders));
+}
 
-// --- Register Form ---
+// ===== INITIALIZE DEFAULT DATA =====
+// Sets up default admin/user accounts and product data if none exists
+function initializeDefaults() {
+  let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
+
+  // Default Admin Account
+  if (!accounts.find((acc) => acc.email === "admin@demo.com")) {
+    accounts.push({
+      email: "admin@demo.com",
+      password: "admin123",
+      role: "admin",
+      name: "Administrator",
+      address: "Head Office",
+    });
+  }
+
+  // Default User Account
+  if (!accounts.find((acc) => acc.email === "user@demo.com")) {
+    accounts.push({
+      email: "user@demo.com",
+      password: "user123",
+      role: "user",
+      name: "Demo User",
+      address: "Mumbai, India",
+    });
+  }
+
+  localStorage.setItem("accounts", JSON.stringify(accounts));
+
+  // Default products (if empty)
+  let products = JSON.parse(localStorage.getItem("products")) || [];
+  if (products.length === 0) {
+    products = [
+      {
+        name: "Paneer Butter Masala",
+        price: "₹250",
+        description: "Rich and creamy paneer curry with butter and spices",
+      },
+      {
+        name: "Chicken Biryani",
+        price: "₹350",
+        description: "Fragrant rice dish with chicken and aromatic spices",
+      },
+      {
+        name: "Masala Dosa",
+        price: "₹120",
+        description: "Crispy rice crepe filled with spiced potato filling",
+      },
+      {
+        name: "Chai Tea",
+        price: "₹50",
+        description: "Traditional Indian spiced tea with milk",
+      },
+    ];
+    localStorage.setItem("products", JSON.stringify(products));
+  }
+}
+
+// ===== REGISTER USER =====
+// Handles new user registration and stores the account data
 registerForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const email = registerEmail.value;
   const password = registerPassword.value;
-  auth
-    .createUserWithEmailAndPassword(email, password)
-    .then((cred) => {
-      registerForm.reset();
-      db.collection("users").doc(cred.user.uid).set({
-        email: email,
-        role: "user",
-      });
-    })
-    .catch((err) => alert(err.message));
+
+  let accounts = getAccounts();
+  if (accounts.find((acc) => acc.email === email)) {
+    alert("Email already registered!");
+    return;
+  }
+
+  accounts.push({ email, password, role: "user" });
+  saveAccounts(accounts);
+
+  alert("User registered successfully!");
+  registerForm.reset();
 });
 
-// --- Login Form ---
+// ===== USER LOGIN =====
+// Authenticates user and shows user panel after successful login
 loginForm.addEventListener("submit", (e) => {
   e.preventDefault();
   const email = loginEmail.value;
   const password = loginPassword.value;
-  auth
-    .signInWithEmailAndPassword(email, password)
-    .then(() => loginForm.reset())
-    .catch((err) => alert(err.message));
-});
 
-// --- Logout ---
-logoutNav.addEventListener("click", () => {
-  auth.signOut();
-});
+  let accounts = getAccounts();
+  const user = accounts.find(
+    (acc) =>
+      acc.email === email && acc.password === password && acc.role === "user"
+  );
 
-// --- Auth Listener ---
-auth.onAuthStateChanged((user) => {
   if (user) {
+    localStorage.setItem("currentUser", JSON.stringify(user));
     authContainer.style.display = "none";
     userPanel.style.display = "block";
     logoutNav.style.display = "block";
-    displayMyProducts();
-    displayMyOrders();
+    renderMyProducts();
+    renderMyOrders();
   } else {
-    authContainer.style.display = "block";
-    userPanel.style.display = "none";
-    logoutNav.style.display = "none";
+    alert("Invalid credentials!");
   }
 });
 
-// --- Upload Product ---
+// ===== LOGOUT FUNCTION =====
+// Logs out the current user and resets UI visibility
+logoutNav.addEventListener("click", () => {
+  localStorage.removeItem("currentUser");
+  authContainer.style.display = "block";
+  userPanel.style.display = "none";
+  logoutNav.style.display = "none";
+});
+
+// ===== UPLOAD PRODUCT =====
+// Allows a logged-in user to upload a new product
 uploadForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const file = productImage.files[0];
   const name = productName.value;
   const description = productDescription.value;
   const price = productPrice.value;
-  const user = auth.currentUser;
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
-  const storageRef = storage.ref(`products/${user.uid}/${file.name}`);
-  storageRef.put(file).then((snapshot) => {
-    snapshot.ref.getDownloadURL().then((downloadURL) => {
-      db.collection("products")
-        .add({
-          name: name,
-          description: description,
-          price: price,
-          imageUrl: downloadURL,
-          userId: user.uid,
-        })
-        .then(() => {
-          uploadForm.reset();
-          alert("Product uploaded successfully");
-        });
-    });
+  if (!currentUser) return alert("Please login first!");
+
+  let products = getProducts();
+  products.push({
+    name,
+    description,
+    price: "₹" + price, // price in Indian Rupee
+    userId: currentUser.email,
   });
+  saveProducts(products);
+
+  uploadForm.reset();
+  renderMyProducts();
+  alert("Product uploaded successfully");
 });
 
-// --- Render Products ---
-const renderProducts = (products) => {
+// ===== MY PRODUCTS =====
+// Displays all products uploaded by the logged-in user
+function renderMyProducts() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) return;
+
+  const products = getProducts().filter((p) => p.userId === currentUser.email);
   myProductList.innerHTML = "";
-  products.forEach((product) => {
+  products.forEach((product, idx) => {
     const productDiv = document.createElement("div");
     productDiv.className = "product";
     productDiv.innerHTML = `
       <h3>${product.name}</h3>
       <p>${product.description}</p>
       <p>Price: ${product.price}</p>
-      <img src="${product.imageUrl}" width="100">
-      <button class="edit-btn" data-id="${product.id}">Edit</button>
-      <button class="delete-btn" data-id="${product.id}">Delete</button>
+      <button onclick="deleteMyProduct('${product.name}', '${currentUser.email}')">Delete</button>
     `;
     myProductList.appendChild(productDiv);
   });
-};
+}
 
-const displayMyProducts = () => {
-  const user = auth.currentUser;
-  if (user) {
-    db.collection("products")
-      .where("userId", "==", user.uid)
-      .onSnapshot((snapshot) => {
-        const products = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        renderProducts(products);
-      });
-  }
-};
+// ===== DELETE PRODUCT =====
+// Deletes a specific product uploaded by the logged-in user
+function deleteMyProduct(name, userId) {
+  let products = getProducts().filter(
+    (p) => !(p.name === name && p.userId === userId)
+  );
+  saveProducts(products);
+  renderMyProducts();
+}
 
-myProductList.addEventListener("click", (e) => {
-  const id = e.target.dataset.id;
-  if (e.target.classList.contains("delete-btn")) {
-    db.collection("products")
-      .doc(id)
-      .delete()
-      .then(() => {
-        alert("Product deleted successfully");
-      });
-  }
-  if (e.target.classList.contains("edit-btn")) {
-    const newPrice = prompt("Enter new price:");
-    if (newPrice) {
-      db.collection("products")
-        .doc(id)
-        .update({ price: newPrice })
-        .then(() => {
-          alert("Product updated successfully");
-        });
-    }
-  }
-});
+// ===== MY ORDERS =====
+// Displays all orders belonging to the currently logged-in user
+function renderMyOrders() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (!currentUser) return;
 
-// --- Render Orders ---
-const renderOrders = (orders) => {
+  const orders = getOrders().filter((o) => o.userId === currentUser.email);
   orderList.innerHTML = "";
-  orders.forEach((order) => {
+  orders.forEach((order, idx) => {
     const orderDiv = document.createElement("div");
     orderDiv.className = "order-item";
     orderDiv.innerHTML = `
-      <p><strong>Order ID:</strong> ${order.id}</p>
-      <p><strong>Total:</strong> ${order.total}</p>
+      <p><strong>Order ID:</strong> ${idx + 1}</p>
+      <p><strong>Product:</strong> ${order.productId}</p>
+      <p><strong>Quantity:</strong> ${order.quantity}</p>
       <p><strong>Status:</strong> ${order.status}</p>
     `;
     orderList.appendChild(orderDiv);
   });
-};
+}
 
-const displayMyOrders = () => {
-  const user = auth.currentUser;
-  if (user) {
-    db.collection("orders")
-      .where("userId", "==", user.uid)
-      .onSnapshot((snapshot) => {
-        const orders = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        }));
-        renderOrders(orders);
-      });
+// ===== INITIAL PAGE LOAD =====
+// Loads defaults and restores user session if already logged in
+document.addEventListener("DOMContentLoaded", () => {
+  initializeDefaults(); // Load default data
+
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  if (currentUser && currentUser.role === "user") {
+    authContainer.style.display = "none";
+    userPanel.style.display = "block";
+    logoutNav.style.display = "block";
+    renderMyProducts();
+    renderMyOrders();
   }
-};
+});
