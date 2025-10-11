@@ -87,6 +87,8 @@ Email: user@demo.com
 Password: user123
 ```
 
+---
+
 ## 🧠 How It Works
 
 When you first load the site, it automatically seeds default data into LocalStorage.
