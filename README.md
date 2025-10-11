@@ -85,7 +85,7 @@ Email: user@demo.com
 Password: user123
 ```
 
-🧠 How It Works
+## 🧠 How It Works
 
 When you first load the site, it automatically seeds default data into LocalStorage.
 
@@ -97,7 +97,7 @@ Data updates in real-time through LocalStorage — no external backend needed.
 
 ---
 
-🎨 Theme & Colors
+## 🎨 Theme & Colors
 
 | Element    | Color                 | Description                               |
 | ---------- | --------------------- | ----------------------------------------- |
@@ -108,7 +108,7 @@ Data updates in real-time through LocalStorage — no external backend needed.
 
 ---
 
-📱 Responsiveness
+## 📱 Responsiveness
 
 - The layout is fully responsive:
 
@@ -120,7 +120,8 @@ Data updates in real-time through LocalStorage — no external backend needed.
 
 ---
 
-🚀 Getting Started
+## 🚀 Getting Started
+
 1️⃣ Clone or Download
 
 ```bash
@@ -135,7 +136,7 @@ Data updates in real-time through LocalStorage — no external backend needed.
 
 ---
 
-💡 Developer Notes
+## 💡 Developer Notes
 
 - The project is offline-first and works without internet.
 
@@ -145,7 +146,7 @@ Data updates in real-time through LocalStorage — no external backend needed.
 
 ---
 
-👨‍💻 Author
+## 👨‍💻 Author
 
 Developed by: Raidanrei
 Style & Logic: GPT-5 (OpenAI)
