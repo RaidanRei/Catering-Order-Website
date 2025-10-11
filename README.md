@@ -1,8 +1,9 @@
-📖 README – Catering Reservation & Ordering System Project
+🧾 README.md
 
 # 🍽️ Catering & Ordering Website (LocalStorage Version)
 
 This is a **modern catering and food ordering web app** built with **HTML, CSS, and JavaScript** — fully client-side, using **LocalStorage** for data persistence (no Firebase or server required).
+
 The project supports **Admin and User** roles with separate dashboards, dynamic order management, and elegant UI styled in **Saffron (Indian orange)** tones.
 
 ---
@@ -42,6 +43,21 @@ The project supports **Admin and User** roles with separate dashboards, dynamic 
 
 ## 🗂️ Project Structure
 
+📦 project/
+│
+├── index.html # Landing page with menu, hero, and features
+├── catering.html # Catering service form & information
+├── user.html # User login/register + order management
+├── admin.html # Admin login/register + product management
+│
+├── style.css # Main stylesheet (Saffron theme, responsive)
+├── admin.js # Admin logic: auth, products, order control
+├── user.js # User logic: auth, order placement, localStorage
+├── cart.js # Cart handling and sidebar management
+├── catering.js # Catering form and UI interactions
+│
+└── (Optional) firebase.js # Not required — replaced by LocalStorage
+
 ---
 
 ## ⚙️ LocalStorage Structure
@@ -59,9 +75,9 @@ The project supports **Admin and User** roles with separate dashboards, dynamic 
 
 ## 🧩 Default Accounts
 
-`js`
+```js
 // Admin (for first-time login)
-Email: admin@demo.com
+Email: admin@catering.com
 Password: admin123
 
 // User (default demo)
@@ -69,42 +85,51 @@ Email: user@demo.com
 Password: user123
 
 🧠 How It Works
+
 When you first load the site, it automatically seeds default data into LocalStorage.
+
 Admin can log in → manage menu & orders.
+
 User can log in → browse menu & place orders.
+
 Data updates in real-time through LocalStorage — no external backend needed.
 
 🎨 Theme & Colors
-Element Color Description
-Primary #FF9933 Saffron orange for buttons and highlights
-Hover #CC7A00 / #E63900 Dark saffron & crimson for interaction
-Background #F5F5DC Warm beige background
-Text #333333 Neutral dark gray for readability
-
+Element	Color	Description
+Primary	#FF9933	Saffron orange for buttons and highlights
+Hover	#CC7A00 / #E63900	Dark saffron & crimson for interaction
+Background	#F5F5DC	Warm beige background
+Text	#333333	Neutral dark gray for readability
 📱 Responsiveness
+
 The layout is fully responsive:
+
 Grid-based menu and product listing.
+
 Flexible catering form layout.
+
 Collapsible cart sidebar on smaller screens.
 
 🚀 Getting Started
 1️⃣ Clone or Download
-git clone https://github.com/RaidanRei/Catering-Reservation-and-Ordering-System.git
+git clone https://github.com/yourusername/catering-localstorage.git
 
 2️⃣ Open in Browser
+
 Simply open index.html in any modern browser.
 All data is stored locally — no server setup required.
 
 💡 Developer Notes
+
 The project is offline-first and works without internet.
+
+You can safely remove firebase.js — it’s not used in this version.
+
 To reset data, clear your browser’s LocalStorage.
 
 👨‍💻 Author
+
 Developed by: Raidanrei
 Style & Logic: GPT-5 (OpenAI)
 Theme: Elegant Saffron UI with responsive layout.
-
----
-
-`markdown`
-<img src="./images/thumbnail_indian_foodie.webp">
+```
