@@ -107,13 +107,13 @@ Password: user123
 
 ## 🧠 How It Works
 
-When you first load the site, it automatically seeds default data into LocalStorage.
+1. When you first load the site, it automatically seeds default data into LocalStorage.
 
-Admin can log in → manage menu & orders.
+2. Admin can log in → manage menu & orders.
 
-User can log in → browse menu & place orders.
+3. User can log in → browse menu & place orders.
 
-Data updates in real-time through LocalStorage — no external backend needed.
+4. Data updates in real-time through LocalStorage — no external backend needed.
 
 ---
 
