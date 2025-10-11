@@ -95,7 +95,7 @@ Experience the interactive slider in action!
 
 ```js
 // Admin (for first-time login)
-Email: admin@catering.com
+Email: admin@demo.com
 Password: admin123
 
 // User (default demo)
