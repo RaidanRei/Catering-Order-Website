@@ -83,6 +83,7 @@ Password: admin123
 // User (default demo)
 Email: user@demo.com
 Password: user123
+```
 
 🧠 How It Works
 
@@ -95,11 +96,11 @@ User can log in → browse menu & place orders.
 Data updates in real-time through LocalStorage — no external backend needed.
 
 🎨 Theme & Colors
-Element	Color	Description
-Primary	#FF9933	Saffron orange for buttons and highlights
-Hover	#CC7A00 / #E63900	Dark saffron & crimson for interaction
-Background	#F5F5DC	Warm beige background
-Text	#333333	Neutral dark gray for readability
+Element Color Description
+Primary #FF9933 Saffron orange for buttons and highlights
+Hover #CC7A00 / #E63900 Dark saffron & crimson for interaction
+Background #F5F5DC Warm beige background
+Text #333333 Neutral dark gray for readability
 📱 Responsiveness
 
 The layout is fully responsive:
@@ -132,4 +133,3 @@ To reset data, clear your browser’s LocalStorage.
 Developed by: Raidanrei
 Style & Logic: GPT-5 (OpenAI)
 Theme: Elegant Saffron UI with responsive layout.
-```
