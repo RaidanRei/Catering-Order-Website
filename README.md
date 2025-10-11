@@ -8,6 +8,22 @@ The project supports **Admin and User** roles with separate dashboards, dynamic 
 
 ---
 
+## 🌐 Live Demo
+
+👉 **[View the Website](https://raidanrei.github.io/Catering-Order-Website/)**  
+Experience the interactive slider in action!
+
+---
+
+## 📸 Preview
+
+| Screenshot |
+| ---------- |
+
+![Screenshot](./images/thumbnail_indian_foodie.webp)
+
+---
+
 ## ✨ Features
 
 ### 👑 Admin Panel
