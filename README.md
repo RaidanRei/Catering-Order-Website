@@ -43,6 +43,7 @@ The project supports **Admin and User** roles with separate dashboards, dynamic 
 
 ## 🗂️ Project Structure
 
+```bash
 📦 project/
 │
 ├── index.html # Landing page with menu, hero, and features
@@ -57,6 +58,7 @@ The project supports **Admin and User** roles with separate dashboards, dynamic 
 ├── catering.js # Catering form and UI interactions
 │
 └── (Optional) firebase.js # Not required — replaced by LocalStorage
+```
 
 ---
 
