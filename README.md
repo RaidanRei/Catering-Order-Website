@@ -148,10 +148,10 @@ Password: user123
    git clone https://github.com/yourusername/catering-localstorage.git
 ```
 
-2️⃣ Open in Browser
+2️⃣ Run locally:
 
 ```bash
-   cd Personal-Portfolio-Website
+open index.html
 ```
 
 ---
