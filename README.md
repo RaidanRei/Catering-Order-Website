@@ -95,41 +95,60 @@ User can log in → browse menu & place orders.
 
 Data updates in real-time through LocalStorage — no external backend needed.
 
+---
+
 🎨 Theme & Colors
-Element Color Description
-Primary #FF9933 Saffron orange for buttons and highlights
-Hover #CC7A00 / #E63900 Dark saffron & crimson for interaction
-Background #F5F5DC Warm beige background
-Text #333333 Neutral dark gray for readability
+
+| Element    | Color                 | Description                               |
+| ---------- | --------------------- | ----------------------------------------- |
+| Primary    | `#FF9933`             | Saffron orange for buttons and highlights |
+| Hover      | `#CC7A00` / `#E63900` | Dark saffron & crimson for interaction    |
+| Background | `#F5F5DC`             | Warm beige background                     |
+| Text       | `#333333`             | Neutral dark gray for readability         |
+
+---
+
 📱 Responsiveness
 
-The layout is fully responsive:
+- The layout is fully responsive:
 
-Grid-based menu and product listing.
+- Grid-based menu and product listing.
 
-Flexible catering form layout.
+- Flexible catering form layout.
 
-Collapsible cart sidebar on smaller screens.
+- Collapsible cart sidebar on smaller screens.
+
+---
 
 🚀 Getting Started
 1️⃣ Clone or Download
-git clone https://github.com/yourusername/catering-localstorage.git
+
+```bash
+   git clone https://github.com/yourusername/catering-localstorage.git
+```
 
 2️⃣ Open in Browser
 
-Simply open index.html in any modern browser.
-All data is stored locally — no server setup required.
+```bash
+   cd Personal-Portfolio-Website
+```
+
+---
 
 💡 Developer Notes
 
-The project is offline-first and works without internet.
+- The project is offline-first and works without internet.
 
-You can safely remove firebase.js — it’s not used in this version.
+- You can safely remove firebase.js — it’s not used in this version.
 
-To reset data, clear your browser’s LocalStorage.
+- To reset data, clear your browser’s LocalStorage.
+
+---
 
 👨‍💻 Author
 
 Developed by: Raidanrei
 Style & Logic: GPT-5 (OpenAI)
 Theme: Elegant Saffron UI with responsive layout.
+
+---
