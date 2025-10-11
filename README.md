@@ -152,8 +152,8 @@ Data updates in real-time through LocalStorage — no external backend needed.
 
 ## 👨‍💻 Author
 
-Developed by: Raidanrei
-Style & Logic: GPT-5 (OpenAI)
-Theme: Elegant Saffron UI with responsive layout.
+RaidanRei 🔗 [GitHub Profile](https://github.com/RaidanRei)
+
+If you like this project, feel free to ⭐ star the repository!
 
 ---
