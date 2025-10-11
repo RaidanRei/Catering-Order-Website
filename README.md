@@ -160,8 +160,6 @@ open index.html
 
 - The project is offline-first and works without internet.
 
-- You can safely remove firebase.js — it’s not used in this version.
-
 - To reset data, clear your browser’s LocalStorage.
 
 ---
