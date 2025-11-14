@@ -2,9 +2,9 @@
 
 # 🍽️ Catering & Ordering Website
 
-This is a **modern catering and food ordering web app** built with **HTML, CSS, and JavaScript** — fully client-side, using **LocalStorage** for data persistence (no Firebase or server required).
+This is a **modern catering and food ordering web app** built with **HTML, CSS, and JavaScript**, now fully powered by **Firebase Authentication + Firebase Firestore** for real-time database and secure login system.
 
-The project supports **Admin and User** roles with separate dashboards, dynamic order management, and elegant UI styled in **Saffron (Indian orange)** tones.
+The project supports **Admin and User** roles with separate dashboards, dynamic order management, Firestore-based Cart & Orders, Catering Reservation submission, and elegant UI styled in **Saffron (Indian orange)** tones.
 
 ---
 
@@ -27,6 +27,20 @@ Experience the interactive slider in action!
 ## ✨ Features
 
 ### 👑 Admin Panel
+
+Login using Firebase Authentication (admin role detected via users collection)
+
+Add new products (name, price, description, image URL) → saved to Firestore collection products
+
+Import menu from index.html directly into Firestore
+
+View all products in a responsive grid layout
+
+View and manage user orders from Firestore (orders collection)
+
+Update order status (placed → approved → completed)
+
+Delete products or orders directly from dashboard
 
 - Login/Register using default localStorage admin credentials.
 - Add new products (name, price, description, image URL).
