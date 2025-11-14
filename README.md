@@ -1,6 +1,6 @@
 🧾 README.md
 
-# 🍽️ Catering & Ordering Website (LocalStorage Version)
+# 🍽️ Catering & Ordering Website
 
 This is a **modern catering and food ordering web app** built with **HTML, CSS, and JavaScript** — fully client-side, using **LocalStorage** for data persistence (no Firebase or server required).
 
@@ -95,12 +95,12 @@ Experience the interactive slider in action!
 
 ```js
 // Admin (for first-time login)
-Email: admin@demo.com
-Password: admin123
+Email: admin@contoh.com
+Password: admincontoh
 
 // User (default demo)
-Email: user@demo.com
-Password: user123
+Email: user@example.com
+Password: userone
 ```
 
 ---
