@@ -49,7 +49,7 @@
                 <span>Total:</span>
                 <span id="cart-total-price">₹0</span>
             </div>
-            <button class="btn checkout-btn">Checkout</button>
+            <button class="btn checkout-btn">💳Checkout</button>
         </div>
     </div>
 
@@ -97,42 +97,42 @@
             <div class="menu__container bd-grid">
                 <!-- Individual dish cards -->
                 <div class="menu__content">
-                    <img src="Images/plate1.png" alt="" class="menu__img">
+                    <img src="images/plate1.png" alt="" class="menu__img">
                     <h3 class="menu__name">Hyderabadi Biryani</h3>
                     <span class="menu__detail">Trademark Dish</span>
                     <span class="menu__preci">₹328</span>
                     <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
                 </div>
                 <div class="menu__content">
-                    <img src="Images/plate2.png" alt="" class="menu__img">
+                    <img src="images/plate2.png" alt="" class="menu__img">
                     <h3 class="menu__name">Chicken Salad</h3>
                     <span class="menu__detail">Trademark Dish</span>
                     <span class="menu__preci">₹321</span>
                     <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
                 </div>
                 <div class="menu__content">
-                    <img src="Images/plate3.png" alt="" class="menu__img">
+                    <img src="images/plate3.png" alt="" class="menu__img">
                     <h3 class="menu__name">Chicken Biryani</h3>
                     <span class="menu__detail">Trademark Dish</span>
                     <span class="menu__preci">₹277</span>
                     <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
                 </div>
                 <div class="menu__content">
-                    <img src="Images/plate4.png" alt="" class="menu__img" width="220px">
+                    <img src="images/plate4.png" alt="" class="menu__img" width="220px">
                     <h3 class="menu__name">Masala Roasted Whole Chicken</h3>
                     <span class="menu__detail">Trademark Dish</span>
                     <span class="menu__preci">₹357</span>
                     <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
                 </div>
                 <div class="menu__content">
-                    <img src="Images/plate5.png" alt="" class="menu__img" width="220px">
+                    <img src="images/plate5.png" alt="" class="menu__img" width="220px">
                     <h3 class="menu__name">Citrus Chicken & Quinoa Salad </h3>
                     <span class="menu__detail">Trademark Dish</span>
                     <span class="menu__preci">₹248</span>
                     <a href="#" class="button menu__button"><i class="bx bx-cart-alt"></i></a>
                 </div>
                 <div class="menu__content">
-                    <img src="Images/plate66.png" alt="" class="menu__img">
+                    <img src="images/plate66.png" alt="" class="menu__img">
                     <h3 class="menu__name">Vegetarian Cuisine</h3>
                     <span class="menu__detail">Trademark Dish</span>
                     <span class="menu__preci">₹350</span>
@@ -159,34 +159,135 @@
     </footer>
 
     <!-- ===== SCRIPT SECTION ===== -->
-    <!-- Adds logout logic and links cart.js functionality -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-            const nav = document.querySelector("nav"); // pakai nav yang sudah ada
+    <script type="module">
+        // === Firebase Imports ===
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-app.js";
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            createUserWithEmailAndPassword
+        } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-auth.js";
 
-            if (currentUser && nav) {
-                // Create Logout button dynamically
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            getDocs,
+            doc,
+            setDoc,
+            deleteDoc,
+            updateDoc,
+            getDoc,
+            query,
+            where,
+            writeBatch
+        } from "https://www.gstatic.com/firebasejs/12.5.0/firebase-firestore.js";
+
+        // === Firebase Config ===
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXk7V8qFm0Ym9fEAfqJsUBa5oZQVq2hO4",
+            authDomain: "catering-reservation-ord-e2249.firebaseapp.com",
+            projectId: "catering-reservation-ord-e2249",
+            storageBucket: "catering-reservation-ord-e2249.firebasestorage.app",
+            messagingSenderId: "536906317721",
+            appId: "1:536906317721:web:13d870e28f09d73d4c7987"
+        };
+
+        // === Initialize Firebase ===
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // === Make Firestore Global ===
+        window.db = db;
+        window.firestore = {
+            collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, getDoc, query, where, writeBatch
+        };
+
+        // === Make Auth Global ===
+        window.auth = {
+            getAuth: () => auth,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            createUserWithEmailAndPassword
+        };
+
+        // === NAVBAR AUTO-LOGOUT BUTTON ===
+        onAuthStateChanged(auth, (user) => {
+            const nav = document.querySelector("nav");
+            const existingLogout = document.getElementById("logout-link");
+
+            if (existingLogout) existingLogout.remove();
+
+            if (user) {
                 const logoutLink = document.createElement("a");
                 logoutLink.href = "#";
-                logoutLink.textContent = "Logout";
+                logoutLink.textContent = "Logout (" + user.email + ")";
                 logoutLink.id = "logout-link";
+                logoutLink.className = "nav-link";
 
-                // Append to navbar
                 nav.appendChild(logoutLink);
 
-                // Logout click event
                 logoutLink.addEventListener("click", (e) => {
                     e.preventDefault();
-                    localStorage.removeItem("currentUser");
-                    alert("You have logged out!");
-                    window.location.href = "index.html";
+                    signOut(auth).then(() => {
+                        alert("You have logged out successfully!");
+                        window.location.href = "index.html";
+                    });
                 });
             }
         });
+
+        // === IMPORT MENU FROM HTML → FIRESTORE ===
+        window.importMenuToFirestore = async () => {
+            const menuItems = document.querySelectorAll(".menu__content");
+
+            if (menuItems.length === 0) {
+                alert("❌ Couldn't find .menu__content in index.html!");
+                return;
+            }
+
+            let imported = 0;
+
+            for (let item of menuItems) {
+                const name = item.querySelector(".menu__name")?.innerText || "Unnamed";
+                const description = item.querySelector(".menu__detail")?.innerText || "No description";
+                const priceText = item.querySelector(".menu__preci")?.innerText.replace("₹", "").trim();
+                const price = parseInt(priceText) || 0;
+                const image = item.querySelector("img")?.getAttribute("src") || "";
+
+                await addDoc(collection(db, "products"), {
+                    name,
+                    description,
+                    price,
+                    image,
+                    createdAt: new Date()
+                });
+
+                imported++;
+            }
+
+            alert(`✅ ${imported} menu successfully imported to Firestore!`);
+        };
     </script>
 
-    <!-- Link JS -->
+    <!-- Reset cart count on reload -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Clear persisted cart
+            localStorage.removeItem("cart");
+
+            // Reset badge number
+            const cartCount = document.querySelector(".cart-count");
+            if (cartCount) cartCount.textContent = "0";
+        });
+    </script>
+
+
+    <!-- Link to cart.js -->
     <script src="cart.js"></script>
 </body>
 
