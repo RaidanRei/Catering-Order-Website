@@ -714,6 +714,14 @@ footer {
     margin-bottom: 30px;
 }
 
+.admin-section-header {
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, #ff9933, #cc7a00);
+    border-radius: 6px 6px 0 0;
+    margin-bottom: 15px;
+}
+
 /* === ALL PRODUCT LIST GRID === */
 /* Displays all uploaded products with saffron border-top */
 #all-product-list {
@@ -1102,6 +1110,42 @@ footer {
     margin-top: 0;
 }
 
+.user-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    border: none;
+    background: #e6e6e6;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
+.tab-btn:hover {
+    background: #ffc107;
+    color: #fff;
+}
+
+.tab-btn.active {
+    background: #ffb84d;
+    color: #fff;
+}
+
+.tab-content {
+    display: none;
+    padding: 10px;
+    border-top: 2px solid #ffb84d;
+}
+
+.tab-content.active {
+    display: block;
+}
+
 /* =========================================
    🛒 CART SIDEBAR STYLING
    ========================================= */
@@ -1163,22 +1207,30 @@ footer {
 .cart-item {
     display: flex;
     align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
 }
 
 .cart-item-img {
-    width: 50px;
-    height: 50px;
+    width: 55px;
+    height: 55px;
     object-fit: cover;
-    border-radius: 5px;
-    margin-right: 10px;
+    border-radius: 8px;
 }
+
 
 .cart-item-info {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
+    flex: 1;
+}
+
+.remove-icon {
+    font-size: 22px;
+    cursor: pointer;
+    color: #ff3b3b;
+    margin-left: 8px;
 }
 
 .cart-item-info span:first-child {
