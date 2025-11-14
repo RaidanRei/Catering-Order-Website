@@ -43,8 +43,9 @@ Experience the interactive slider in action!
 - Browse menu and add items to cart
 
 - Cart auto-syncs with Firestore when logged in:
-- Offline: stored in LocalStorage
-- Online/login: merged with Firestore
+
+  - Offline: stored in LocalStorage
+  - Online/login: merged with Firestore
 
 - Checkout → creates new documents in orders collection
 
@@ -194,10 +195,11 @@ importMenuToFirestore();
 - LocalStorage is now only used for temporary cart display
 
 - Firestore is the main database for:
-- Products
-- Orders
-- Carts
-- Reservations
+
+  - 📦 Products
+  - 🧾 Orders
+  - 🛒 Carts
+  - 🎉 Reservations
 
 - Works offline-first thanks to local caching
 
