@@ -1,89 +1,126 @@
 // ========================= CATERING.JS =========================
-// Handles catering reservation form submission, validation, and storage.
-// Ensures user authentication and saves all reservations in localStorage.
-// ================================================================
+// Handles catering reservation submission, validation,
+// Firestore saving, and email sending via mailto.
+// ===============================================================
+
+// Load firebase auth (provided from catering.html)
+let auth;
+window.setAuthForCatering = (authInstance) => {
+  auth = authInstance;
+};
+
 document.addEventListener("DOMContentLoaded", () => {
-  // ===== DOM ELEMENT REFERENCE =====
-  // Get catering form element from the DOM
+  // ===== DOM ELEMENTS =====
   const cateringForm = document.getElementById("catering-form");
 
-  // ===== LOCALSTORAGE HELPERS =====
-  // Functions for getting and saving catering reservations
-  function getReservations() {
-    return JSON.parse(localStorage.getItem("reservations")) || [];
-  }
-  function saveReservations(res) {
-    localStorage.setItem("reservations", JSON.stringify(res));
-  }
+  if (!cateringForm) return;
 
-  // ===== FORM SUBMISSION EVENT =====
-  // Handles catering form submission and validates user login
-  if (cateringForm) {
-    cateringForm.addEventListener("submit", function (e) {
-      e.preventDefault();
+  // ===== FORM SUBMISSION HANDLER =====
+  cateringForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
 
-      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      if (!currentUser || currentUser.role !== "user") {
-        alert("Please log in as User to submit a catering request.");
-        window.location.href = "user.html";
-        return;
-      }
+    // Check login
+    const user = auth?.currentUser;
+    if (!user) {
+      alert("⚠ Please login as a User to submit your catering request.");
+      window.location.href = "user.html";
+      return;
+    }
 
-      submitCateringRequest();
-    });
-  }
+    // Proceed to catering submission
+    await submitCateringRequest(user);
+  });
 
-  // ===== SUBMIT CATERING REQUEST =====
-  // Collects form input, validates data, and saves a new reservation
-  function submitCateringRequest() {
-    const name = document.getElementById("name").value;
-    const lastName = document.getElementById("last-name").value;
-    const email = document.getElementById("email").value;
-    const phone = document.getElementById("phone").value;
+  // ========================= MAIN FUNCTION =========================
+  async function submitCateringRequest(user) {
+    // Collect form inputs
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
     const date = document.getElementById("date").value;
     const time = document.getElementById("time").value;
     const guests = parseInt(document.getElementById("guests").value, 10);
     const menu = document.getElementById("menu").value;
-    const occasion = document.getElementById("occasion").value;
+    const occasion = document.getElementById("occasion").value.trim();
     const pickupDelivery = document.getElementById("pickup-delivery").value;
-    const requests = document.getElementById("requests").value;
+    const requests = document.getElementById("requests").value.trim();
 
     // ===== VALIDATION RULES =====
-    // Enforce minimum guest requirements for different catering types
-    if (menu === "plated" && guests < 25) {
+    if (menu === "Plated" && guests < 25) {
       alert("Plated Catering requires a minimum of 25 guests.");
       return;
     }
-    if (menu === "buffet" && guests < 20) {
+    if (menu === "Buffet" && guests < 20) {
       alert("Buffet Catering requires a minimum of 20 guests.");
       return;
     }
-    if (menu === "family-style" && guests < 15) {
+    if (menu === "Family Style" && guests < 15) {
       alert("Family Style Catering requires a minimum of 15 guests.");
       return;
     }
 
-    // ===== SAVE RESERVATION =====
-    // Pushes new reservation data into localStorage
-    let reservations = getReservations();
-    reservations.push({
-      name: name + " " + lastName,
-      email,
-      phone,
-      date,
-      time,
-      guests,
-      menu,
-      occasion,
-      pickupOrDelivery: pickupDelivery,
-      requests,
-      status: "submitted",
-    });
-    saveReservations(reservations);
-    // Confirmation alert and form reset
-    alert(
-      "Reservation submitted successfully! You can view it on the Admin page."
-    );
-    document.getElementById("catering-form").reset();
+    // ===== BUILD EMAIL FORMAT =====
+    const emailBody = `CATERING REQUEST
+
+Customer Name: ${firstName} ${lastName}
+Customer Email: ${email}
+Phone: ${phone}
+
+Event Date: ${date}
+Event Time: ${time}
+Guests: ${guests}
+Catering Style: ${menu}
+Occasion: ${occasion}
+Service Type: ${pickupDelivery}
+
+Special Requests:
+${requests}
+
+Submitted by logged-in user:
+${user.email}
+`;
+
+    const mailtoURL =
+      `mailto:indianfoodie.catering@gmail.com` +
+      `?subject=Catering Request from ${encodeURIComponent(
+        firstName + " " + lastName
+      )}` +
+      `&body=${encodeURIComponent(emailBody)}`;
+
+    // Open email client
+    window.location.href = mailtoURL;
+
+    // ===== SAVE TO FIRESTORE TOO =====
+    try {
+      await window.firestore.addDoc(
+        window.firestore.collection(window.db, "reservations"),
+        {
+          userId: user.uid,
+          userEmail: user.email,
+          name: firstName + " " + lastName,
+          email,
+          phone,
+          date,
+          time,
+          guests,
+          menu,
+          occasion,
+          pickupOrDelivery: pickupDelivery,
+          requests,
+          status: "submitted",
+          createdAt: new Date(),
+        }
+      );
+
+      alert(
+        `Thank you, ${firstName}! Your catering request has been submitted and an email draft has opened for you.`
+      );
+
+      cateringForm.reset();
+    } catch (error) {
+      console.error("Firestore error:", error);
+      alert("Request saved to email but failed to save in database.");
+    }
   }
 });
