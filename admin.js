@@ -1,389 +1,489 @@
 // ========================= ADMIN.JS =========================
-// This script manages admin authentication, profile, products,
-// orders, and catering reservations using localStorage.
-// It includes default dummy data for demo purposes.
-// ============================================================
+// Handles admin authentication, profile, products, cart, and orders.
+// Fixes: "Checking authentication..." stuck issue.
+// ============================================================================
 
-// ===== DOM ELEMENT REFERENCES =====
-const authContainer = document.getElementById("auth-container");
-const adminPanel = document.getElementById("admin-panel");
-const loginForm = document.getElementById("login-form");
-const registerForm = document.getElementById("register-form");
-const logoutBtn = document.getElementById("logout-btn");
-
-const loginEmail = document.getElementById("login-email");
-const loginPassword = document.getElementById("login-password");
-const registerEmail = document.getElementById("register-email");
-const registerPassword = document.getElementById("register-password");
-
-// Profile section elements
-const profileDetails = document.getElementById("profile-details");
-const editProfileBtn = document.getElementById("edit-profile-btn");
-const profileForm = document.getElementById("profile-form");
-const profileName = document.getElementById("profile-name");
-const profileAddress = document.getElementById("profile-address");
-
-// Product management elements
-const allProductList = document.getElementById("all-product-list");
-const addProductForm = document.getElementById("add-product-form");
-const productName = document.getElementById("product-name");
-const productPrice = document.getElementById("product-price");
-const productDescription = document.getElementById("product-description");
-
-// Order management elements
-const orderList = document.getElementById("order-list");
-const placeOrderForm = document.getElementById("place-order-form");
-const orderUserId = document.getElementById("order-user-id");
-const orderProductId = document.getElementById("order-product-id");
-const orderQuantity = document.getElementById("order-quantity");
-
-// Reservation management elements
-const reservationList = document.getElementById("reservation-list");
-
-// ===== LOCALSTORAGE HELPERS =====
-// Helper functions for getting and saving data to localStorage.
-function getAccounts() {
-  return JSON.parse(localStorage.getItem("accounts")) || [];
-}
-function saveAccounts(accounts) {
-  localStorage.setItem("accounts", JSON.stringify(accounts));
-}
-function getProducts() {
-  return JSON.parse(localStorage.getItem("products")) || [];
-}
-function saveProducts(products) {
-  localStorage.setItem("products", JSON.stringify(products));
-}
-function getOrders() {
-  return JSON.parse(localStorage.getItem("orders")) || [];
-}
-function saveOrders(orders) {
-  localStorage.setItem("orders", JSON.stringify(orders));
-}
-function getReservations() {
-  return JSON.parse(localStorage.getItem("reservations")) || [];
-}
-function saveReservations(res) {
-  localStorage.setItem("reservations", JSON.stringify(res));
-}
-
-// ===== INITIALIZE DEFAULT DATA =====
-// Creates default admin and user accounts, products, and a demo reservation.
-function initializeDefaults() {
-  let accounts = JSON.parse(localStorage.getItem("accounts")) || [];
-
-  // Default Admin Account
-  if (!accounts.find((acc) => acc.email === "admin@demo.com")) {
-    accounts.push({
-      email: "admin@demo.com",
-      password: "admin123",
-      role: "admin",
-      name: "Administrator",
-      address: "Head Office",
-    });
-  }
-
-  // Default User Account
-  if (!accounts.find((acc) => acc.email === "user@demo.com")) {
-    accounts.push({
-      email: "user@demo.com",
-      password: "user123",
-      role: "user",
-      name: "Demo User",
-      address: "Mumbai, India",
-    });
-  }
-
-  localStorage.setItem("accounts", JSON.stringify(accounts));
-
-  // Default Products
-  let products = JSON.parse(localStorage.getItem("products")) || [];
-  if (products.length === 0) {
-    products = [
-      {
-        name: "Paneer Butter Masala",
-        price: "₹250",
-        description: "Rich and creamy paneer curry with butter and spices",
-      },
-      {
-        name: "Chicken Biryani",
-        price: "₹350",
-        description: "Fragrant rice dish with chicken and aromatic spices",
-      },
-      {
-        name: "Masala Dosa",
-        price: "₹120",
-        description: "Crispy rice crepe filled with spiced potato filling",
-      },
-      {
-        name: "Chai Tea",
-        price: "₹50",
-        description: "Traditional Indian spiced tea with milk",
-      },
-    ];
-    localStorage.setItem("products", JSON.stringify(products));
-  }
-
-  // Default Reservation
-  let reservations = JSON.parse(localStorage.getItem("reservations")) || [];
-  if (reservations.length === 0) {
-    reservations = [
-      {
-        name: "Rahul Sharma",
-        email: "rahul@example.com",
-        phone: "9876543210",
-        date: "2025-10-20",
-        time: "19:00",
-        guests: 30,
-        menu: "buffet",
-        occasion: "Wedding Reception",
-        pickupOrDelivery: "delivery",
-        requests: "Include both vegetarian and non-vegetarian options",
-        status: "submitted",
-      },
-    ];
-    localStorage.setItem("reservations", JSON.stringify(reservations));
-  }
-}
-
-// ===== REGISTER NEW ADMIN =====
-// Handles new admin registration and saves to localStorage.
-registerForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = registerEmail.value;
-  const password = registerPassword.value;
-
-  let accounts = getAccounts();
-  if (accounts.find((acc) => acc.email === email)) {
-    alert("Email already registered!");
-    return;
-  }
-
-  accounts.push({ email, password, role: "admin", name: "", address: "" });
-  saveAccounts(accounts);
-
-  alert("Admin registered successfully!");
-  registerForm.reset();
-});
-
-// ===== ADMIN LOGIN =====
-// Validates admin credentials and opens admin panel upon success.
-loginForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const email = loginEmail.value;
-  const password = loginPassword.value;
-
-  let accounts = getAccounts();
-  const user = accounts.find(
-    (acc) =>
-      acc.email === email && acc.password === password && acc.role === "admin"
-  );
-
-  if (user) {
-    localStorage.setItem("currentUser", JSON.stringify(user));
-    authContainer.style.display = "none";
-    adminPanel.style.display = "block";
-    renderAllProducts();
-    renderAllOrders();
-    renderReservations();
-    renderProfile();
-  } else {
-    alert("Invalid credentials!");
-  }
-});
-
-// ===== LOGOUT FUNCTION =====
-// Clears the current user session and hides the admin panel.
-logoutBtn.addEventListener("click", () => {
-  localStorage.removeItem("currentUser");
-  authContainer.style.display = "block";
-  adminPanel.style.display = "none";
-});
-
-// ===== PROFILE MANAGEMENT =====
-// Displays and updates admin profile data.
-function renderProfile() {
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (!currentUser) return;
-  profileDetails.innerHTML = `
-    <p><strong>Name:</strong> ${currentUser.name || ""}</p>
-    <p><strong>Email:</strong> ${currentUser.email}</p>
-    <p><strong>Address:</strong> ${currentUser.address || ""}</p>
-  `;
-  profileName.value = currentUser.name || "";
-  profileAddress.value = currentUser.address || "";
-}
-
-editProfileBtn.addEventListener("click", () => {
-  profileForm.style.display = "block";
-});
-
-profileForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  let currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  let accounts = getAccounts();
-
-  accounts = accounts.map((acc) =>
-    acc.email === currentUser.email
-      ? { ...acc, name: profileName.value, address: profileAddress.value }
-      : acc
-  );
-  saveAccounts(accounts);
-
-  currentUser = {
-    ...currentUser,
-    name: profileName.value,
-    address: profileAddress.value,
-  };
-  localStorage.setItem("currentUser", JSON.stringify(currentUser));
-
-  renderProfile();
-  profileForm.style.display = "none";
-  alert("Profile updated successfully");
-});
-
-// ===== PRODUCT MANAGEMENT =====
-// Displays all products, allows adding and deleting.
-function renderAllProducts() {
-  const products = getProducts();
-  allProductList.innerHTML = "";
-  products.forEach((product, idx) => {
-    const productDiv = document.createElement("div");
-    productDiv.className = "product";
-    productDiv.innerHTML = `
-      <h3>${product.name}</h3>
-      <p>${product.description}</p>
-      <p class="price">${product.price}</p>
-      <button onclick="deleteProduct(${idx})">Delete</button>
-    `;
-    allProductList.appendChild(productDiv);
-  });
-}
-
-// Deletes a product by index and re-renders the list.
-function deleteProduct(idx) {
-  let products = getProducts();
-  products.splice(idx, 1);
-  saveProducts(products);
-  renderAllProducts();
-}
-
-// Adds a new product to the list.
-addProductForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  let products = getProducts();
-  products.push({
-    name: productName.value,
-    price: productPrice.value,
-    description: productDescription.value,
-  });
-  saveProducts(products);
-  addProductForm.reset();
-  renderAllProducts();
-  alert("Product added successfully");
-});
-
-// ===== ORDER MANAGEMENT =====
-// Displays all orders and allows admin to delete or add new orders.
-function renderAllOrders() {
-  const orders = getOrders();
-  orderList.innerHTML = "";
-  orders.forEach((order, idx) => {
-    const orderDiv = document.createElement("div");
-    orderDiv.className = "order-item";
-    orderDiv.innerHTML = `
-      <p><strong>Order ID:</strong> ${idx + 1}</p>
-      <p><strong>User ID:</strong> ${order.userId}</p>
-      <p><strong>Product:</strong> ${order.productId}</p>
-      <p><strong>Quantity:</strong> ${order.quantity}</p>
-      <p><strong>Status:</strong> ${order.status}</p>
-      <button onclick="deleteOrder(${idx})">Delete</button>
-    `;
-    orderList.appendChild(orderDiv);
-  });
-}
-
-// Deletes an order and updates the list.
-function deleteOrder(index) {
-  let orders = getOrders();
-  if (confirm("Are you sure you want to delete this order?")) {
-    orders.splice(index, 1);
-    saveOrders(orders);
-    renderAllOrders();
-    alert("Order deleted successfully!");
-  }
-}
-
-// Handles new order creation from admin panel.
-placeOrderForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  let orders = getOrders();
-  orders.push({
-    userId: orderUserId.value,
-    productId: orderProductId.value,
-    quantity: orderQuantity.value,
-    status: "placed",
-  });
-  saveOrders(orders);
-  placeOrderForm.reset();
-  renderAllOrders();
-  alert("Order placed successfully");
-});
-
-// ===== RESERVATION MANAGEMENT =====
-// Displays catering reservations and allows approving or rejecting.
-function renderReservations() {
-  const reservations = getReservations();
-  reservationList.innerHTML = "";
-
-  if (reservations.length === 0) {
-    reservationList.innerHTML = "<p>No reservations found.</p>";
-    return;
-  }
-
-  reservations.forEach((res, idx) => {
-    const resDiv = document.createElement("div");
-    resDiv.className = "reservation-item";
-    resDiv.innerHTML = `
-      <p><strong>ID:</strong> ${idx + 1}</p>
-      <p><strong>Name:</strong> ${res.name}</p>
-      <p><strong>Email:</strong> ${res.email}</p>
-      <p><strong>Phone:</strong> ${res.phone}</p>
-      <p><strong>Date:</strong> ${res.date} at ${res.time}</p>
-      <p><strong>Guests:</strong> ${res.guests}</p>
-      <p><strong>Menu:</strong> ${res.menu}</p>
-      <p><strong>Occasion:</strong> ${res.occasion}</p>
-      <p><strong>Pickup/Delivery:</strong> ${res.pickupOrDelivery}</p>
-      <p><strong>Requests:</strong> ${res.requests || "-"}</p>
-      <p><strong>Status:</strong> ${res.status}</p>
-      <button onclick="updateReservationStatus(${idx}, 'approved')">Approve</button>
-      <button onclick="updateReservationStatus(${idx}, 'rejected')">Reject</button>
-    `;
-    reservationList.appendChild(resDiv);
-  });
-}
-
-// Updates reservation status (approved/rejected) and saves it.
-function updateReservationStatus(idx, newStatus) {
-  let reservations = getReservations();
-  reservations[idx].status = newStatus;
-  saveReservations(reservations);
-  renderReservations();
-  alert(`Reservation ${newStatus}!`);
-}
-
-// ===== INITIAL LOAD =====
-// Initializes default data and checks for existing admin login session.
+// ===== WAIT UNTIL FIREBASE LOADED =====
 document.addEventListener("DOMContentLoaded", () => {
-  initializeDefaults(); // Ensure default data exists
-
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  if (currentUser && currentUser.role === "admin") {
-    authContainer.style.display = "none";
-    adminPanel.style.display = "block";
-    renderAllProducts();
-    renderAllOrders();
-    renderReservations();
-    renderProfile();
-  }
+  // Pastikan Firebase sudah siap
+  const checkFirebase = setInterval(() => {
+    if (window.auth && window.firestore && window.db) {
+      clearInterval(checkFirebase);
+      initAdminDashboard();
+    }
+  }, 300);
 });
+
+function initAdminDashboard() {
+  console.log("✅ Firebase detected, starting Admin Dashboard...");
+
+  // ===== DOM ELEMENTS =====
+  const authContainer = document.getElementById("auth-container");
+  const adminPanel = document.getElementById("admin-panel");
+  const loginForm = document.getElementById("login-form");
+  const logoutBtn = document.getElementById("logout-btn");
+  const logoutNav = document.getElementById("logout-nav");
+
+  const loginEmail = document.getElementById("login-email");
+  const loginPassword = document.getElementById("login-password");
+
+  const profileDetails = document.getElementById("profile-details");
+  const editProfileBtn = document.getElementById("edit-profile-btn");
+  const profileForm = document.getElementById("profile-form");
+  const profileName = document.getElementById("profile-name");
+  const profileAddress = document.getElementById("profile-address");
+
+  const allProductList = document.getElementById("all-product-list");
+  const addToCartForm = document.getElementById("add-to-cart-form");
+  const cartProductId = document.getElementById("cart-product-id");
+  const cartQuantity = document.getElementById("cart-quantity");
+  const cartList = document.getElementById("cart-list");
+
+  const orderList = document.getElementById("order-list");
+  const placeOrderForm = document.getElementById("place-order-form");
+  const orderProductId = document.getElementById("order-product-id");
+  const orderQuantity = document.getElementById("order-quantity");
+
+  // ===== LOADING STATE =====
+  const loadingScreen = document.createElement("div");
+  loadingScreen.textContent = "Checking authentication...";
+  loadingScreen.style.textAlign = "center";
+  loadingScreen.style.padding = "2rem";
+  loadingScreen.style.fontWeight = "bold";
+  document.body.prepend(loadingScreen);
+
+  authContainer.style.display = "none";
+  adminPanel.style.display = "none";
+
+  // ===== SETUP AUTH LISTENER =====
+  window.auth.onAuthStateChanged(window.auth.getAuth(), async (user) => {
+    loadingScreen.remove();
+
+    if (user) {
+      try {
+        const docRef = window.firestore.doc(window.db, "users", user.uid);
+        const docSnap = await window.firestore.getDoc(docRef);
+
+        if (docSnap.exists() && docSnap.data().role === "admin") {
+          console.log("👑 Admin authenticated:", user.email);
+          authContainer.style.display = "none";
+          adminPanel.style.display = "block";
+          if (logoutNav) logoutNav.style.display = "inline-block";
+          renderProfile(user);
+          renderAllProducts();
+          renderCart();
+          renderOrders();
+        } else {
+          alert("Access Denied: Not an admin account.");
+          await window.auth.signOut(window.auth.getAuth());
+          authContainer.style.display = "block";
+          adminPanel.style.display = "none";
+        }
+      } catch (error) {
+        console.error("Error checking admin role:", error);
+        authContainer.style.display = "block";
+        adminPanel.style.display = "none";
+      }
+    } else {
+      console.log("ℹ️ No user logged in");
+      authContainer.style.display = "block";
+      adminPanel.style.display = "none";
+      if (logoutNav) logoutNav.style.display = "none";
+    }
+  });
+
+  // ===== LOGIN =====
+  if (loginForm) {
+    loginForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = loginEmail.value.trim();
+      const password = loginPassword.value.trim();
+
+      if (!email || !password) {
+        alert("Please enter both email and password.");
+        return;
+      }
+
+      try {
+        const userCredential = await window.auth.signInWithEmailAndPassword(
+          window.auth.getAuth(),
+          email,
+          password
+        );
+        const user = userCredential.user;
+
+        console.log("✅ Logged in:", user.email);
+        alert("Login successful!");
+
+        authContainer.style.display = "none";
+        adminPanel.style.display = "block";
+        if (logoutNav) logoutNav.style.display = "inline-block";
+
+        renderProfile(user);
+        renderAllProducts();
+        renderCart();
+        renderOrders();
+      } catch (error) {
+        console.error("Login Error:", error);
+        alert("Login failed: " + error.message);
+      }
+    });
+  }
+
+  // ===== LOGOUT =====
+  [logoutBtn, logoutNav].forEach((btn) => {
+    if (btn) {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+        try {
+          await window.auth.signOut(window.auth.getAuth());
+          alert("You have logged out successfully!");
+          authContainer.style.display = "block";
+          adminPanel.style.display = "none";
+          if (logoutNav) logoutNav.style.display = "none";
+        } catch (error) {
+          console.error("Logout Error:", error);
+          alert("Logout failed: " + error.message);
+        }
+      });
+    }
+  });
+
+  // ===== PROFILE =====
+  async function renderProfile(user) {
+    try {
+      const docRef = window.firestore.doc(window.db, "users", user.uid);
+      const docSnap = await window.firestore.getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        profileDetails.innerHTML = `
+          <p>📧 <strong>Email:</strong> ${data.email}</p>
+          <p>👤 <strong>Name:</strong> ${data.name || "N/A"}</p>
+          <p>📍 <strong>Address:</strong> ${data.address || "N/A"}</p>
+        `;
+        profileName.value = data.name || "";
+        profileAddress.value = data.address || "";
+      }
+    } catch (error) {
+      console.error("Error rendering profile:", error);
+    }
+  }
+
+  if (editProfileBtn) {
+    editProfileBtn.addEventListener("click", () => {
+      profileForm.style.display =
+        profileForm.style.display === "none" ? "block" : "none";
+    });
+  }
+
+  if (profileForm) {
+    profileForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = window.auth.getAuth().currentUser;
+      if (!user) return;
+      try {
+        const docRef = window.firestore.doc(window.db, "users", user.uid);
+        await window.firestore.updateDoc(docRef, {
+          name: profileName.value,
+          address: profileAddress.value,
+        });
+        alert("Profile updated!");
+        renderProfile(user);
+        profileForm.style.display = "none";
+      } catch (error) {
+        alert("Update failed: " + error.message);
+      }
+    });
+  }
+
+  // ===== VIEW PRODUCT =====
+  async function renderAllProducts() {
+    allProductList.innerHTML = "<p>Loading products...</p>";
+    try {
+      const snapshot = await window.firestore.getDocs(
+        window.firestore.collection(window.db, "products")
+      );
+      if (snapshot.empty) {
+        allProductList.innerHTML = "<p>No products found.</p>";
+        return;
+      }
+      let html = "";
+      snapshot.forEach((doc) => {
+        const p = doc.data();
+        html += `
+          <div class="product-item">
+            <h4>${p.name}</h4>
+            <p>${p.description}</p>
+            <p>Price: Rp${p.price.toLocaleString("id-ID")}</p>
+          </div>`;
+      });
+      allProductList.innerHTML = html;
+    } catch (error) {
+      console.error("Error loading products:", error);
+    }
+  }
+
+  // ===== CART =====
+  async function renderCart() {
+    const user = window.auth.getAuth().currentUser;
+    if (!user) return;
+    cartList.innerHTML = "<p>Loading cart...</p>";
+    try {
+      const q = window.firestore.query(
+        window.firestore.collection(window.db, "cart"),
+        window.firestore.where("userId", "==", user.uid)
+      );
+      const snapshot = await window.firestore.getDocs(q);
+      if (snapshot.empty) {
+        cartList.innerHTML = "<p>No items in cart.</p>";
+        return;
+      }
+      let html = "";
+      snapshot.forEach((doc) => {
+        const c = doc.data();
+        html += `<p>🛒 Product: ${c.productId} | Qty: ${c.quantity}</p>`;
+      });
+      cartList.innerHTML = html;
+    } catch (error) {
+      console.error("Error loading cart:", error);
+    }
+  }
+
+  // ===== ORDERS WITH UPDATE FEATURE =====
+  async function renderOrders() {
+    const user = window.auth.getAuth().currentUser;
+    if (!user) return;
+
+    orderList.innerHTML = "<p>Loading orders...</p>";
+
+    try {
+      const q = window.firestore.query(
+        window.firestore.collection(window.db, "orders"),
+        window.firestore.orderBy("placedAt", "desc")
+      );
+
+      const snapshot = await window.firestore.getDocs(q);
+
+      if (snapshot.empty) {
+        orderList.innerHTML = "<p>No orders found.</p>";
+        return;
+      }
+
+      let html = "";
+      snapshot.forEach((doc) => {
+        const o = doc.data();
+        const id = doc.id;
+
+        html += `
+      <div class="order-item" style="padding:10px; border:1px solid #ddd; border-radius:8px; margin-bottom:10px;">
+        <p>🍛 <strong>${o.productName}</strong></p>
+        <p>🆔 Order ID: ${id}</p>
+        <p>💰 Total: ₹${o.totalPrice}</p>
+        <p>📦 Quantity: ${o.quantity}</p>
+        <p>📅 ${
+          o.placedAt?.toDate ? o.placedAt.toDate().toLocaleString() : "N/A"
+        }</p>
+
+        <p>🔖 Status: 
+            <strong>${o.status}</strong>
+        </p>
+
+        <button class="update-order-btn" data-id="${id}">
+          🔄 Update Status
+        </button>
+
+        <div id="update-panel-${id}" style="display:none; margin-top:10px;">
+          <select id="status-select-${id}">
+            <option value="placed" ${
+              o.status === "placed" ? "selected" : ""
+            }>placed</option>
+            <option value="processing" ${
+              o.status === "processing" ? "selected" : ""
+            }>processing</option>
+            <option value="completed" ${
+              o.status === "completed" ? "selected" : ""
+            }>completed</option>
+            <option value="cancelled" ${
+              o.status === "cancelled" ? "selected" : ""
+            }>cancelled</option>
+          </select>
+
+          <button class="save-status-btn" data-id="${id}">
+            💾 Save
+          </button>
+        </div>
+        <hr>
+      </div>
+      `;
+      });
+
+      orderList.innerHTML = html;
+
+      setupUpdateOrderEvents();
+    } catch (error) {
+      console.error("Error loading orders:", error);
+      orderList.innerHTML = "<p>Error loading orders.</p>";
+    }
+  }
+
+  // ===== UPDATE ORDER EVENTS =====
+  function setupUpdateOrderEvents() {
+    const updateButtons = document.querySelectorAll(".update-order-btn");
+    updateButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.dataset.id;
+        const panel = document.getElementById(`update-panel-${id}`);
+        panel.style.display = panel.style.display === "none" ? "block" : "none";
+      });
+    });
+
+    const saveButtons = document.querySelectorAll(".save-status-btn");
+    saveButtons.forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const id = btn.dataset.id;
+        const newStatus = document.getElementById(`status-select-${id}`).value;
+
+        try {
+          const orderRef = window.firestore.doc(window.db, "orders", id);
+          await window.firestore.updateDoc(orderRef, { status: newStatus });
+
+          alert("✅ Order status updated!");
+          renderOrders();
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Failed to update order: " + error.message);
+        }
+      });
+    });
+  }
+
+  // ===== PLACE ORDER =====
+  if (placeOrderForm) {
+    placeOrderForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = window.auth.getAuth().currentUser;
+      if (!user) {
+        alert("Please login first.");
+        return;
+      }
+
+      const productId = orderProductId.value.trim();
+      const quantity = parseInt(orderQuantity.value);
+
+      if (!productId || isNaN(quantity) || quantity <= 0) {
+        alert("Invalid input.");
+        return;
+      }
+
+      try {
+        await window.firestore.addDoc(
+          window.firestore.collection(window.db, "orders"),
+          {
+            userId: user.uid,
+            productId,
+            quantity,
+            status: "placed",
+            placedAt: new Date(),
+          }
+        );
+        alert("Order placed!");
+        renderOrders();
+      } catch (error) {
+        alert("Failed: " + error.message);
+      }
+    });
+  }
+
+  // ======================= ADMIN ADD TO CART ========================
+  const addToCartForm2 = document.getElementById("add-to-cart-form");
+
+  async function loadAdminCart() {
+    const user = window.auth.getAuth().currentUser;
+    if (!user) return;
+
+    const cartRef = window.firestore.doc(window.db, "carts", user.uid);
+    const snap = await window.firestore.getDoc(cartRef);
+
+    cartList.innerHTML = "<h3>Cart Items:</h3>";
+
+    if (!snap.exists()) {
+      cartList.innerHTML += "<p>No items in cart.</p>";
+      return;
+    }
+
+    const items = snap.data().items || [];
+
+    if (items.length === 0) {
+      cartList.innerHTML += "<p>No items in cart.</p>";
+      return;
+    }
+
+    items.forEach((item) => {
+      cartList.innerHTML += `
+        <div class="cart-row">
+            <p><strong>${item.name}</strong> — Qty: ${item.quantity}</p>
+        </div>
+      `;
+    });
+  }
+
+  addToCartForm2.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const productId = document.getElementById("cart-product-id").value.trim();
+    const quantity = parseInt(document.getElementById("cart-quantity").value);
+
+    if (!productId || quantity <= 0) {
+      alert("⚠ Please enter a valid product ID and quantity!");
+      return;
+    }
+
+    const user = window.auth.getAuth().currentUser;
+    if (!user) {
+      alert("You must be logged in!");
+      return;
+    }
+
+    try {
+      const productRef = window.firestore.doc(window.db, "products", productId);
+      const productSnap = await window.firestore.getDoc(productRef);
+
+      if (!productSnap.exists()) {
+        alert("❌ Product ID not found in database!");
+        return;
+      }
+
+      const product = productSnap.data();
+
+      const cartRef = window.firestore.doc(window.db, "carts", user.uid);
+      const cartSnap = await window.firestore.getDoc(cartRef);
+
+      let cartItems = [];
+
+      if (cartSnap.exists()) {
+        cartItems = cartSnap.data().items || [];
+      }
+
+      cartItems.push({
+        productId,
+        name: product.name,
+        price: product.price,
+        quantity,
+      });
+
+      await window.firestore.setDoc(cartRef, { items: cartItems });
+
+      alert("🛒 Item added to cart!");
+      loadAdminCart();
+
+      addToCartForm2.reset();
+    } catch (err) {
+      console.error(err);
+      alert("Error adding to cart: " + err.message);
+    }
+  });
+
+  window.auth.onAuthStateChanged(window.auth.getAuth(), (user) => {
+    if (user) loadAdminCart();
+  });
+}
