@@ -25,7 +25,7 @@
                 <a href="catering.html" class="nav-link">Catering</a>
                 <a href="admin.html" class="nav-link active-link">Admin</a>
                 <a href="user.html" class="nav-link">User</a>
-                <a href="#" id="logout-nav" class="nav-link" style="display:none;">Logout</a>
+                <a href="#" id="logout-nav" class="nav-link" style="display:none;">🚪Logout</a>
             </nav>
         </div>
     </header>
@@ -39,22 +39,24 @@
             <form id="login-form" class="auth-form">
                 <input type="email" id="login-email" placeholder="Email" required>
                 <input type="password" id="login-password" placeholder="Password" required>
-                <button type="submit" class="login">Login</button>
+                <button type="submit" class="login">🔑Login</button>
             </form>
             <h2>Admin Register</h2>
             <form id="register-form" class="auth-form">
                 <input type="email" id="register-email" placeholder="Email" required>
                 <input type="password" id="register-password" placeholder="Password" required>
-                <button type="submit" class="register">Register</button>
+                <button type="submit" class="login">🔑Register as Admin</button>
             </form>
         </div>
         <!-- === ADMIN DASHBOARD === -->
         <div id="admin-panel" class="admin-panel" style="display:none;">
-            <h1>Marketplace Dashboard</h1>
-            <a href="#" id="logout-btn" class="logout-btn">Logout</a>
-            <!-- === PROFILE SECTION === -->
-            <div id="profile-section">
-                <h2>My Profile</h2>
+            <h1>Admin Dashboard</h1>
+            <a href="#" id="logout-btn" class="logout-btn">🚪Logout</a>
+            <div class="admin-section-header"></div>
+
+            <!-- === MY PROFILE === -->
+            <section id="profile-section">
+                <h2>📇My Profile📇</h2>
                 <div id="profile-details"></div>
                 <button id="edit-profile-btn">Edit Profile</button>
                 <form id="profile-form" style="display:none;">
@@ -62,39 +64,47 @@
                     <input type="text" id="profile-address" placeholder="Address">
                     <button type="submit">Save Profile</button>
                 </form>
-            </div>
-            <!-- === PRODUCTS SECTION === -->
-            <div id="all-products-section">
-                <h2>All Dishes</h2>
-                <div id="all-product-list"></div>
-                <h2>Add a New Product</h2>
-                <form id="add-product-form">
-                    <input type="text" id="product-name" placeholder="Product Name" required>
-                    <input type="number" id="product-price" placeholder="Price" required>
-                    <textarea id="product-description" placeholder="Description"></textarea>
-                    <button type="submit">Add Product</button>
+            </section>
+            <br>
+            <div class="admin-section-header"></div>
+            <!-- === VIEW PRODUCT === -->
+            <section id="view-products-section">
+                <!-- === PRODUCTS FROM FIRESTORE === -->
+                <section class="menu section bd-container" id="db-products">
+                    <h2>🍛View Product🍛</h2>
+                    <div class="menu__container bd-grid" id="product-list"></div>
+                </section>
+            </section>
+            <br>
+            <div class="admin-section-header"></div>
+            <!-- === ADD TO CART === -->
+            <section id="add-to-cart-section">
+                <h2>🧺Add to Cart🧺</h2>
+                <form id="add-to-cart-form">
+                    <input type="text" id="cart-product-id" placeholder="Product ID" required>
+                    <input type="number" id="cart-quantity" placeholder="Quantity" required>
+                    <button type="submit">Add to Cart</button>
                 </form>
-            </div>
-            <!-- === CART MANAGEMENT === -->
-            <div id="add-to-cart-section">
-                <h2>Manage Carts</h2>
                 <div id="cart-list"></div>
-            </div>
-            <!-- === ORDERS SECTION === -->
-            <div id="my-orders-section">
-                <h2>Manage Orders</h2>
+            </section>
+            <br>
+            <div class="admin-section-header"></div>
+            <!-- === MY ORDER === -->
+            <section id="my-orders-section">
+                <h2>🏷️My Orders🏷️</h2>
                 <div id="order-list"></div>
-            </div>
-            <!-- === PLACE ORDER FORM === -->
-            <div id="place-order-section">
-                <h2>Create a New Order</h2>
+            </section>
+            <br>
+            <div class="admin-section-header"></div>
+            <!-- === PLACE ORDER === -->
+            <section id="place-order-section">
+                <h2>📦Place Order📦</h2>
                 <form id="place-order-form">
-                    <input type="text" id="order-user-id" placeholder="User ID" required>
                     <input type="text" id="order-product-id" placeholder="Product ID" required>
                     <input type="number" id="order-quantity" placeholder="Quantity" required>
                     <button type="submit">Place Order</button>
                 </form>
-            </div>
+            </section>
         </div>
     </main>
 
@@ -113,6 +123,99 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== FIREBASE SCRIPT ===== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signInWithEmailAndPassword,
+            signOut,
+            createUserWithEmailAndPassword,
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            getDoc,
+            setDoc,
+            updateDoc,
+            addDoc,
+            deleteDoc,
+            collection,
+            getDocs,
+            query,
+            where,
+            orderBy,
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXk7V8qFm0Ym9fEAfqJsUBa5oZQVq2hO4",
+            authDomain: "catering-reservation-ord-e2249.firebaseapp.com",
+            projectId: "catering-reservation-ord-e2249",
+            storageBucket: "catering-reservation-ord-e2249.firebasestorage.app",
+            messagingSenderId: "536906317721",
+            appId: "1:536906317721:web:c49a18f74270401016dd08",
+        };
+
+        // === Initialize Firebase App ===
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // ✅ Expose all Firestore functions globally (needed by admin.js)
+        window.firestore = {
+            getFirestore,
+            doc,
+            getDoc,
+            setDoc,
+            updateDoc,
+            addDoc,
+            deleteDoc,
+            collection,
+            getDocs,
+            query,
+            where,
+            orderBy,
+        };
+
+        // ✅ Expose Firebase Auth globally for admin.js
+        window.auth = {
+            getAuth: () => auth,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            createUserWithEmailAndPassword,
+        };
+
+        window.db = db;
+
+        const productList = document.getElementById("product-list");
+
+        async function loadProducts() {
+            const productsRef = collection(window.db, "products");
+            const snapshot = await getDocs(productsRef);
+
+            productList.innerHTML = "";
+            snapshot.forEach(doc => {
+                const p = doc.data();
+
+                const itemHTML = `
+            <div class="menu__content">
+                <img src="${p.image}" class="menu__img">
+                <h3 class="menu__name">${p.name}</h3>
+                <span class="menu__detail">${p.description}</span>
+                <span class="menu__preci">₹${p.price}</span>
+                <a href="#" class="button menu__button">
+                    <i class="bx bx-cart-alt"></i>
+                </a>
+            </div>
+        `;
+                productList.innerHTML += itemHTML;
+            });
+        }
+        loadProducts();
+    </script>
 
     <!-- Link JS -->
     <script src="admin.js"></script>
