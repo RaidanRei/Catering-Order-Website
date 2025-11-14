@@ -1,132 +1,236 @@
 // ========================= CART.JS =========================
-// Handles shopping cart UI, localStorage syncing, and checkout process
-// for both user and admin dashboards. Keeps data persistent.
-// ============================================================
+// Combines Firestore sync with localStorage for instant cart UI response.
+// Prevents scroll-to-top, updates .cart-count instantly, and keeps persistence.
+// ================================================================================
 
 document.addEventListener("DOMContentLoaded", () => {
-  // ===== DOM ELEMENT REFERENCES =====
-  // Select key UI elements for the cart interface
+  // ===== DOM ELEMENTS =====
   const cartIcon = document.querySelector(".cart-icon");
   const cartSidebar = document.getElementById("cart-sidebar");
   const closeCart = document.getElementById("close-cart");
-  const addToCartButtons = document.querySelectorAll(".menu__button");
   const cartItemsContainer = document.querySelector(".cart-items");
   const cartTotalPrice = document.getElementById("cart-total-price");
   const cartCount = document.querySelector(".cart-count");
   const checkoutButton = document.querySelector(".checkout-btn");
 
   // ===== LOCALSTORAGE HELPERS =====
-  // Utility functions for reading and writing cart data
-  function getCart() {
+  function getLocalCart() {
     return JSON.parse(localStorage.getItem("cart")) || [];
   }
-  function saveCart(cart) {
+  function saveLocalCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
   }
 
-  // ===== SIDEBAR TOGGLE =====
-  // Opens and closes the shopping cart sidebar
+  // ===== FIRESTORE HELPERS =====
+  function getCartRef(userId) {
+    return window.firestore.doc(window.db, "carts", userId);
+  }
+
+  async function saveCartToFirestore(userId, cart) {
+    try {
+      await window.firestore.setDoc(getCartRef(userId), { items: cart });
+    } catch (err) {
+      console.warn("⚠️ Firestore sync failed (offline mode)", err);
+    }
+  }
+
+  async function getCartFromFirestore(userId) {
+    try {
+      const snap = await window.firestore.getDoc(getCartRef(userId));
+      return snap.exists() ? snap.data().items || [] : [];
+    } catch {
+      return [];
+    }
+  }
+
+  // ===== TOGGLE CART SIDEBAR =====
   const openCart = () => cartSidebar.classList.add("active");
   const closeCartSidebar = () => cartSidebar.classList.remove("active");
 
+  if (cartIcon) {
+    cartIcon.addEventListener("click", (e) => {
+      e.preventDefault(); // ✅ Prevent scroll-to-top (#)
+      cartSidebar.classList.toggle("active");
+    });
+  }
+  if (closeCart) closeCart.addEventListener("click", closeCartSidebar);
+
   // ===== UPDATE CART DISPLAY =====
-  // Renders cart items, updates total price, and badge count
   function updateCartDisplay() {
-    const cart = getCart();
+    const cart = getLocalCart();
     cartItemsContainer.innerHTML = "";
     let total = 0;
 
     cart.forEach((item, idx) => {
-      total += parseFloat(item.price.replace("₹", ""));
-
-      const cartItem = document.createElement("div");
-      cartItem.classList.add("cart-item");
-      cartItem.innerHTML = `
-        <img src="${item.image}" alt="${item.name}" class="cart-item-img">
-        <div class="cart-item-info">
-            <span>${item.name}</span>
-            <span>${item.price}</span>
-        </div>
-        <i class='bx bx-x cart-item-remove' data-idx="${idx}"></i>
-      `;
-      cartItemsContainer.appendChild(cartItem);
+      total += item.price;
+      const el = document.createElement("div");
+      el.className = "cart-item";
+      el.innerHTML = `
+  <img src="${item.image}" class="cart-item-img" alt="${item.name}">
+  <div class="cart-item-info">
+    <h4>${item.name}</h4>
+    <span>₹${item.price}</span>
+  </div>
+  <i class='bx bx-x cart-item-remove remove-icon' data-idx="${idx}"></i>
+`;
+      cartItemsContainer.appendChild(el);
     });
 
-    cartTotalPrice.textContent = `₹${total}`;
+    cartTotalPrice.textContent = `₹${total.toLocaleString("en-IN")}`;
     cartCount.textContent = cart.length;
     cartCount.style.display = cart.length > 0 ? "flex" : "none";
   }
 
-  // ===== EVENT HANDLERS =====
-  // Toggles sidebar visibility when clicking the cart icon
-  if (cartIcon) {
-    cartIcon.addEventListener("click", (e) => {
-      e.preventDefault();
-      cartSidebar.classList.contains("active")
-        ? closeCartSidebar()
-        : openCart();
+  // ===== ADD TO CART =====
+  function attachAddToCartButtons() {
+    const buttons = document.querySelectorAll(
+      ".add-to-cart-btn, .menu__button"
+    );
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const menuItem = e.target.closest(".menu__content, .menu__card");
+        const name =
+          menuItem.querySelector(".menu__name")?.textContent || "Unknown";
+        const priceText =
+          menuItem.querySelector(".menu__price, .menu__preci")?.textContent ||
+          "₹0";
+        const price = parseInt(priceText.replace(/[^\d]/g, ""));
+        const image =
+          menuItem.querySelector(".menu__img")?.src || "images/default.jpg";
+
+        // === Add to localStorage instantly ===
+        let cart = getLocalCart();
+        cart.push({ name, price, image });
+        saveLocalCart(cart);
+        updateCartDisplay();
+
+        // === If login, also sync Firestore ===
+        const user = window.auth?.currentUser;
+        if (user) saveCartToFirestore(user.uid, cart);
+
+        alert(`🛒 "${name}" added to cart!`);
+      });
     });
   }
 
-  // Closes the sidebar when clicking the close button
-  if (closeCart) closeCart.addEventListener("click", closeCartSidebar);
-  // ===== ADD TO CART =====
-  // Adds selected menu items to the cart and updates the display
-  addToCartButtons.forEach((button) => {
-    button.addEventListener("click", (e) => {
-      e.preventDefault();
-      const menuItem = e.target.closest(".menu__content");
-      const itemName = menuItem.querySelector(".menu__name").textContent;
-      const itemPrice = menuItem.querySelector(".menu__preci").textContent;
-      const itemImage = menuItem.querySelector(".menu__img").src;
+  // ===== CLICK PRODUCT IMAGE → ADD TO CART + OPEN CART =====
+  function attachImageClickToCart() {
+    const images = document.querySelectorAll(".menu__img");
 
-      let cart = getCart();
-      cart.push({ name: itemName, price: itemPrice, image: itemImage });
-      saveCart(cart);
-      updateCartDisplay();
+    images.forEach((img) => {
+      img.style.cursor = "pointer";
+
+      img.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        const menuItem = e.target.closest(".menu__content, .menu__card");
+        const name =
+          menuItem.querySelector(".menu__name")?.textContent || "Unknown";
+        const priceText =
+          menuItem.querySelector(".menu__price, .menu__preci")?.textContent ||
+          "₹0";
+        const price = parseInt(priceText.replace(/[^\d]/g, ""));
+        const image = menuItem.querySelector(".menu__img")?.src;
+
+        // Add to local cart instantly
+        let cart = getLocalCart();
+        cart.push({ name, price, image });
+        saveLocalCart(cart);
+        updateCartDisplay();
+
+        // Sync to Firestore if logged in
+        const user = window.auth?.currentUser;
+        if (user) saveCartToFirestore(user.uid, cart);
+
+        alert(`🛒 "${name}" added to cart!`);
+
+        // Auto-open cart sidebar
+        cartSidebar.classList.add("active");
+      });
     });
-  });
+  }
 
   // ===== REMOVE ITEM FROM CART =====
-  // Deletes selected item from the cart by index
-  cartItemsContainer.addEventListener("click", (e) => {
+  cartItemsContainer.addEventListener("click", async (e) => {
     if (e.target.classList.contains("cart-item-remove")) {
-      const idx = e.target.dataset.idx;
-      let cart = getCart();
+      const idx = parseInt(e.target.dataset.idx, 10);
+      let cart = getLocalCart();
       cart.splice(idx, 1);
-      saveCart(cart);
+      saveLocalCart(cart);
       updateCartDisplay();
+
+      const user = window.auth?.currentUser;
+      if (user) saveCartToFirestore(user.uid, cart);
     }
   });
 
-  // ===== PLACE ORDER / CHECKOUT =====
-  // Converts cart items into orders and clears the cart
-  if (checkoutButton) {
-    checkoutButton.addEventListener("click", () => {
-      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-      if (currentUser && currentUser.role === "user") {
-        let cart = getCart();
-        let orders = JSON.parse(localStorage.getItem("orders")) || [];
-        cart.forEach((item) => {
-          orders.push({
-            userId: currentUser.email,
-            productId: item.name,
-            quantity: 1,
-            status: "placed",
-          });
-        });
-        localStorage.setItem("orders", JSON.stringify(orders));
-        localStorage.removeItem("cart");
-        updateCartDisplay();
-        alert("Checkout successful! Orders have been placed.");
-      } else {
-        alert("Please log in as User to proceed with checkout.");
-        window.location.href = "user.html";
+  // ===== INITIAL LOAD =====
+  updateCartDisplay();
+  attachAddToCartButtons();
+  attachImageClickToCart();
+
+  // Keep Firestore in sync with local cart after login
+  window.auth?.onAuthStateChanged(window.auth.getAuth(), async (user) => {
+    if (user) {
+      const serverCart = await getCartFromFirestore(user.uid);
+      if (serverCart.length > 0) {
+        saveLocalCart(serverCart);
       }
-    });
+      updateCartDisplay();
+    }
+  });
+});
+
+// ========================= UNIVERSAL CHECKOUT CLICK LISTENER =========================
+document.body.addEventListener("click", async (e) => {
+  const checkoutBtn = e.target.closest(".checkout-btn");
+  if (!checkoutBtn) return;
+
+  e.preventDefault();
+  console.log("🧾 Checkout button detected through delegation");
+
+  const user = window.auth?.currentUser;
+
+  if (!user) {
+    const goLogin = confirm(
+      "⚠️ You need to login first before checkout.\n\nClick OK to go to the login page."
+    );
+    if (goLogin) window.location.href = "user.html";
+    return;
   }
 
-  // ===== INITIAL LOAD =====
-  // Renders the cart state when the page is first loaded
-  updateCartDisplay();
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  if (cart.length === 0) {
+    alert("Your cart is empty. Add some items first!");
+    return;
+  }
+
+  try {
+    const batch = window.firestore.writeBatch(window.db);
+    const ordersCol = window.firestore.collection(window.db, "orders");
+
+    cart.forEach((item) => {
+      const newOrderRef = window.firestore.doc(ordersCol);
+      batch.set(newOrderRef, {
+        userId: user.uid,
+        userEmail: user.email,
+        productName: item.name,
+        totalPrice: item.price,
+        status: "placed",
+        placedAt: window.firestore.serverTimestamp(),
+      });
+    });
+
+    await batch.commit();
+
+    localStorage.removeItem("cart");
+    updateCartDisplay();
+
+    alert("✅ Checkout successful! Your order has been placed.");
+  } catch (err) {
+    console.error("Checkout error:", err);
+    alert("Checkout failed.\n" + err.message);
+  }
 });
