@@ -39,15 +39,17 @@ Experience the interactive slider in action!
 ### 🙋‍♂️ User Panel
 
 - Login/Register using Firebase Auth
+
 - Browse menu and add items to cart
+
 - Cart auto-syncs with Firestore when logged in:
-
-Offline: stored in LocalStorage
-
-Online/login: merged with Firestore
+- Offline: stored in LocalStorage
+- Online/login: merged with Firestore
 
 - Checkout → creates new documents in orders collection
+
 - Catering reservation form sends request to Firestore (reservations collection)
+
 - View order history (coming soon)
 
 ### 🛒 Cart System
