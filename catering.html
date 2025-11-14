@@ -4,17 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Indian Catering - A Feast for Your Senses</title>
+    <title>Catering Service - Indian Foodie</title>
+
     <!-- ===== ICONS & CSS ===== -->
-    <!-- Boxicons for UI icons -->
     <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
-    <!-- Main CSS stylesheet -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
     <!-- ===== HEADER / NAVBAR ===== -->
-    <!-- Contains logo and navigation links with active page highlighting -->
     <header>
         <div class="container">
             <a href="index.html" class="logo">
@@ -25,115 +23,103 @@
                 <a href="catering.html" class="nav-link active-link">Catering</a>
                 <a href="admin.html" class="nav-link">Admin</a>
                 <a href="user.html" class="nav-link">User</a>
+                <a href="#" id="logout-nav" class="nav-link" style="display:none;">Logout</a>
             </nav>
         </div>
     </header>
 
-    <!-- ===== MAIN SECTION ===== -->
+    <!-- ===== MAIN CONTENT ===== -->
     <main>
-        <!-- === CATERING SECTION === -->
-        <!-- Event request form for users to submit catering details -->
-        <section class="catering-section">
+        <!-- === CATERING FORM SECTION === -->
+        <section class="catering-section container">
+            <!-- LEFT: IMAGE -->
             <div class="catering-image">
-                <img src="images/indian_dishes.png" alt="Catering Food">
+                <img src="images/indian_dishes.png" alt="Catering Service">
             </div>
+
+            <!-- RIGHT: FORM -->
             <div class="catering-form-container">
-                <h3>REQUEST CATERING NOW</h3>
-                <h2>Tell us a little about your event and <br> we’ll help you coordinate it</h2>
-                <p>Call your local Indian Foodie location directly to place all platter pick up orders</p>
-                <!-- Catering Form -->
+                <h3>Plan Your Event</h3>
+                <h2>Book Our Catering Service</h2>
+                <p>Fill in your event details below and our team will contact you to customize your Indian feast.</p>
+
                 <form id="catering-form">
                     <div class="form-row">
-                        <input type="text" id="name" placeholder="First Name*" required>
-                        <input type="text" id="last-name" placeholder="Last Name*" required>
+                        <input type="text" id="firstName" placeholder="First Name" required>
+                        <input type="text" id="lastName" placeholder="Last Name" required>
                     </div>
+
                     <div class="form-row">
-                        <input type="email" id="email" placeholder="Email Address*" required>
-                        <input type="tel" id="phone" placeholder="Phone Number*" required>
+                        <input type="email" id="email" placeholder="Email Address" required>
+                        <input type="tel" id="phone" placeholder="Phone Number" required>
                     </div>
+
                     <div class="form-row">
-                        <input type="date" id="date" placeholder="Event Date*" required>
-                        <input type="time" id="time" placeholder="Delivery/Pickup Time*" required>
+                        <input type="date" id="date" required>
+                        <input type="time" id="time" required>
                     </div>
+
                     <div class="form-row">
+                        <input type="number" id="guests" placeholder="Number of Guests" min="1" required>
                         <select id="menu" required>
-                            <option value="">Type of Catering*</option>
-                            <option value="buffet">Buffet Catering</option>
-                            <option value="plated">Plated Catering</option>
-                            <option value="family-style">Family Style Catering</option>
+                            <option value="">Type of Catering</option>
+                            <option value="Buffet">Buffet</option>
+                            <option value="Plated">Plated</option>
+                            <option value="Family Style">Family Style</option>
                         </select>
-                        <input type="number" id="guests" placeholder="Guest Count*" min="1" required>
                     </div>
+
                     <div class="form-row">
-                        <select id="occasion" required>
-                            <option value="">Occasion*</option>
-                            <option value="birthday">Birthday</option>
-                            <option value="wedding">Wedding</option>
-                            <option value="wedding">Anniversary</option>
-                            <option value="birthday">Graduation</option>
-                            <option value="birthday">Holiday Celebration</option>
-                            <option value="corporate">Family Reunion</option>
-                            <option value="corporate">School Event</option>
-                            <option value="corporate">Work Event</option>
-                            <option value="corporate">Retirement Party</option>
-                            <option value="other">Other</option>
-                        </select>
+                        <input type="text" id="occasion" placeholder="Occasion (Wedding, Birthday, etc.)" required>
                         <select id="pickup-delivery" required>
-                            <option value="">Pickup or Delivery?*</option>
-                            <option value="pickup">Pickup</option>
-                            <option value="delivery">Delivery</option>
+                            <option value="">Service Type</option>
+                            <option value="Pickup">Pickup</option>
+                            <option value="Delivery">Delivery</option>
                         </select>
                     </div>
+
                     <div class="form-row form-row-textarea">
-                        <textarea id="requests" placeholder="Tell us what you'd like to order" rows="6"></textarea>
+                        <textarea id="requests" placeholder="Special Requests or Notes"></textarea>
                     </div>
-                    <button type="submit">Submit Request</button>
+
+                    <button type="submit">Submit Catering Request</button>
                 </form>
             </div>
         </section>
-        <hr class="section-divider">
-        <!-- === TYPES OF CATERING === -->
-        <!-- Displays various catering service options -->
+
+        <!-- === CATERING TYPES SECTION === -->
         <section class="catering-types">
-            <div class="container">
-                <h2 class="catering-types-title">
-                    Choose the catering style that best suits your event.<br>We’ll take care of the rest!
-                </h2>
-                <div class="catering-types-grid">
-                    <!-- Buffet Catering -->
-                    <div class="catering-type-card">
-                        <img src="https://images.surferseo.art/85fcfba1-2287-4baa-a486-ba06bcb465fe.jpeg"
-                            alt="Buffet Catering">
-                        <h3 class="buffet">Buffet Catering</h3>
-                        <p>A classic catering option where guests serve themselves from a wide variety of dishes.
-                            Perfect for large gatherings.</p>
-                        <p><small>Minimum 20 guests · 48 hour notice</small></p>
-                    </div>
-                    <!-- Plated Catering -->
-                    <div class="catering-type-card">
-                        <img src="https://static1.squarespace.com/static/56c0b729555986b9cd6b2491/t/5c61859d9b747a2840874180/1549895089829/?format=1500w"
-                            alt="Plated Catering">
-                        <h3 class="plated">Plated Catering</h3>
-                        <p>A more formal experience with individually plated meals served to each guest at their table.
-                        </p>
-                        <p><small>Minimum 25 guests · 72 hour notice</small></p>
-                    </div>
-                    <!-- Family-Style Catering -->
-                    <div class="catering-type-card">
-                        <img src="https://static.vecteezy.com/system/resources/thumbnails/030/963/115/small_2x/indian-family-having-dinner-together-at-home-in-the-evening-india-on-bokeh-background-generative-ai-photo.jpg"
-                            alt="Family-Style Catering">
-                        <h3 class="family">Family-Style Catering</h3>
-                        <p>Dishes are served at each table for guests to share, creating a warm and communal dining
-                            experience.</p>
-                        <p><small>Minimum 15 guests · 48 hour notice</small></p>
-                    </div>
+            <h2 class="catering-types-title">Our Catering Styles</h2>
+
+            <div class="catering-types-grid container">
+                <div class="catering-type-card">
+                    <img src="https://images.surferseo.art/85fcfba1-2287-4baa-a486-ba06bcb465fe.jpeg"
+                        alt="Buffet Style">
+                    <h3 class="buffet">Buffet Service</h3>
+                    <p>Perfect for weddings and large gatherings. Guests can enjoy a variety of Indian dishes at their
+                        own pace.</p>
+                </div>
+
+                <div class="catering-type-card">
+                    <img src="https://images.squarespace-cdn.com/content/56c0b729555986b9cd6b2491/1549895072040-E78X7W9L4ULQEAOZKFI9/?content-type=image%2Fpng"
+                        alt="Plated Dinner">
+                    <h3 class="plated">Plated Service</h3>
+                    <p>Elegant and personalized dining experience with table service — ideal for formal events and
+                        receptions.</p>
+                </div>
+
+                <div class="catering-type-card">
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/030/963/115/small_2x/indian-family-having-dinner-together-at-home-in-the-evening-india-on-bokeh-background-generative-ai-photo.jpg"
+                        alt="Family Style">
+                    <h3 class="family">Family Style</h3>
+                    <p>Share the joy of food! Dishes are served in large portions at each table for guests to share
+                        together.</p>
                 </div>
             </div>
         </section>
     </main>
 
     <!-- ===== FOOTER ===== -->
-    <!-- Includes brand info and social media links -->
     <footer>
         <div class="container footer-content">
             <a href="index.html" class="footer-link">
@@ -148,36 +134,48 @@
         </div>
     </footer>
 
-    <!-- ===== LOGOUT SCRIPT ===== -->
-    <!-- Adds dynamic logout button for logged-in users -->
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-            const nav = document.querySelector("nav"); // pakai nav yang sudah ada
+    <!-- ===== SCRIPT SECTION ===== -->
+    <script src="catering.js"></script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 
-            if (currentUser && nav) {
-                // Buat tombol Logout
-                const logoutLink = document.createElement("a");
-                logoutLink.href = "#";
-                logoutLink.textContent = "Logout";
-                logoutLink.id = "logout-link";
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXk7V8qFm0Ym9fEAfqJsUBa5oZQVq2hO4",
+            authDomain: "catering-reservation-ord-e2249.firebaseapp.com",
+            projectId: "catering-reservation-ord-e2249",
+            storageBucket: "catering-reservation-ord-e2249.firebasestorage.app",
+            messagingSenderId: "536906317721",
+            appId: "1:536906317721:web:c49a18f74270401016dd08"
+        };
 
-                // Masukkan ke navbar
-                nav.appendChild(logoutLink);
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        window.setAuthForCatering(auth);
 
-                // Event klik logout
-                logoutLink.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    localStorage.removeItem("currentUser");
-                    alert("You have logged out!");
-                    window.location.href = "catering.html";
-                });
+        // Logout element in navbar
+        const logoutNav = document.getElementById("logout-nav");
+
+        // Check login status
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // If user is login → show logout button with email
+                logoutNav.style.display = "inline-block";
+                logoutNav.textContent = `Logout (${user.email})`;
+            } else {
+                // If not login → hide the logout button
+                logoutNav.style.display = "none";
             }
         });
-    </script>
 
-    <!-- Link JS -->
-    <script src="catering.js"></script>
+        // Logout action
+        logoutNav.addEventListener("click", async (e) => {
+            e.preventDefault();
+            await signOut(auth);
+            alert("You have logged out!");
+            window.location.href = "index.html";
+        });
+    </script>
 </body>
 
 </html>
