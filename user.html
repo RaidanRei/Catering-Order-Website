@@ -26,7 +26,7 @@
                 <a href="admin.html" class="nav-link">Admin</a>
                 <a href="user.html" class="nav-link active-link">User</a>
                 <!-- Logout button (hidden until logged in) -->
-                <a href="#" id="logout-nav" class="nav-link" style="display:none;">Logout</a>
+                <a href="#" id="logout-nav" class="nav-link" style="display:none;">🚪Logout</a>
             </nav>
         </div>
     </header>
@@ -40,50 +40,55 @@
             <form id="login-form">
                 <input type="email" id="login-email" placeholder="Email" required>
                 <input type="password" id="login-password" placeholder="Password" required>
-                <button type="submit">Login to Order</button>
+                <button type="submit">🔑Login to Order</button>
             </form>
             <hr>
             <h2>Subscribe To Our Service</h2>
             <form id="register-form">
                 <input type="email" id="register-email" placeholder="Email" required>
                 <input type="password" id="register-password" placeholder="Password" required>
-                <button type="submit">Be Our Customer</button>
+                <button type="submit">🧑‍🤝‍🧑Be Our Customer</button>
             </form>
         </div>
         <!-- === USER DASHBOARD === -->
-        <!-- Appears after login: manage dishes and orders -->
         <div id="user-panel" style="display:none;">
             <h1>My Culinary Dashboard</h1>
-            <!-- === UPLOAD NEW PRODUCT === -->
-            <section id="upload-product-section" class="user-section">
-                <h2>Add a New Dish to Your Menu</h2>
+            <!-- === DASHBOARD TABS === -->
+            <nav class="user-tabs">
+                <button class="tab-btn active" data-section="profile">👤 Profile User</button>
+                <button class="tab-btn" data-section="upload">📦 Upload Product Details</button>
+                <button class="tab-btn" data-section="orders">🧾 View Orders</button>
+            </nav>
+            <!-- === PROFILE SECTION === -->
+            <section id="profile-section" class="tab-content active">
+                <h2>My Profile</h2>
+                <div id="profile-details"></div>
+                <form id="profile-form" style="display:none;">
+                    <input type="text" id="profile-name" placeholder="Full Name" required>
+                    <input type="text" id="profile-address" placeholder="Address" required>
+                    <button type="submit">Save Changes</button>
+                </form>
+                <button id="edit-profile-btn">Edit Profile</button>
+            </section>
+            <!-- === UPLOAD PRODUCT SECTION === -->
+            <section id="upload-section" class="tab-content">
+                <h2>Add a New Dish</h2>
                 <form id="upload-form">
-                    <input type="text" id="product-name" placeholder="Dish Name (e.g., Chicken Tikka Masala)" required>
-                    <textarea id="product-description"
-                        placeholder="Describe your dish, its ingredients, and what makes it special."
-                        required></textarea>
+                    <input type="text" id="product-name" placeholder="Dish Name" required>
+                    <textarea id="product-description" placeholder="Describe your dish" required></textarea>
                     <input type="number" id="product-price" placeholder="Price (in ₹)" required>
                     <input type="file" id="product-image" accept="image/*" required>
-                    <button type="submit">Add Dish</button>
+                    <button type="submit">Upload</button>
                 </form>
+                <div id="my-product-list"></div>
             </section>
-            <!-- === USER MENU LIST === -->
-            <!-- Displays user-added dishes -->
-            <section id="my-products-section" class="user-section">
-                <h2>My Menu</h2>
-                <div id="my-product-list">
-                    <!-- User's products will be listed here -->
-                </div>
-            </section>
-            <!-- === USER ORDER LIST === -->
-            <!-- Displays all user order statuses -->
-            <section id="view-orders-section" class="user-section">
+            <!-- === ORDERS SECTION === -->
+            <section id="orders-section" class="tab-content">
                 <h2>My Orders</h2>
-                <div id="order-list">
-                    <!-- Orders will be listed here -->
-                </div>
+                <div id="order-list"></div>
             </section>
         </div>
+
     </main>
 
     <!-- ===== FOOTER ===== -->
@@ -101,6 +106,90 @@
             </div>
         </div>
     </footer>
+
+    <!-- ===== SCRIPT SECTION ===== -->
+    <script type="module">
+        import { getApps, initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import {
+            getAuth,
+            onAuthStateChanged,
+            signInWithEmailAndPassword,
+            signOut,
+            createUserWithEmailAndPassword,
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import {
+            getFirestore,
+            doc,
+            getDoc,
+            setDoc,
+            updateDoc,
+            addDoc,
+            deleteDoc,
+            collection,
+            getDocs,
+            query,
+            where,
+            orderBy,
+            serverTimestamp,
+        } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCXk7V8qFm0Ym9fEAfqJsUBa5oZQVq2hO4",
+            authDomain: "catering-reservation-ord-e2249.firebaseapp.com",
+            projectId: "catering-reservation-ord-e2249",
+            storageBucket: "catering-reservation-ord-e2249.firebasestorage.app",
+            messagingSenderId: "536906317721",
+            appId: "1:536906317721:web:c49a18f74270401016dd08",
+        };
+
+        // ✅ FIX: Reuse existing Firebase app if already initialized
+        const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // ✅ Expose Firebase utilities globally
+        window.firestore = {
+            getFirestore,
+            doc,
+            getDoc,
+            setDoc,
+            updateDoc,
+            addDoc,
+            deleteDoc,
+            collection,
+            getDocs,
+            query,
+            where,
+            orderBy,
+            serverTimestamp,
+        };
+
+        window.auth = {
+            getAuth: () => auth,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged,
+            createUserWithEmailAndPassword,
+        };
+
+        window.db = db;
+    </script>
+
+    <script>
+        // simple tab switcher
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll(".tab-btn").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    // remove 'active' from all
+                    document.querySelectorAll(".tab-btn, .tab-content").forEach(el => el.classList.remove("active"));
+                    // add 'active' to clicked
+                    btn.classList.add("active");
+                    document.getElementById(`${btn.dataset.section}-section`).classList.add("active");
+                });
+            });
+        });
+    </script>
 
     <!-- Link JS -->
     <script src="user.js"></script>
