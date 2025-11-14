@@ -28,46 +28,42 @@ Experience the interactive slider in action!
 
 ### 👑 Admin Panel
 
-Login using Firebase Authentication (admin role detected via users collection)
-
-Add new products (name, price, description, image URL) → saved to Firestore collection products
-
-Import menu from index.html directly into Firestore
-
-View all products in a responsive grid layout
-
-View and manage user orders from Firestore (orders collection)
-
-Update order status (placed → approved → completed)
-
-Delete products or orders directly from dashboard
-
-- Login/Register using default localStorage admin credentials.
-- Add new products (name, price, description, image URL).
-- View all existing products in a responsive grid layout.
-- View and manage user orders.
-- Update order status (`Submitted → Approved → Completed`).
-- Delete products or orders directly from dashboard.
+- Login using Firebase Authentication (admin role detected via users collection)
+- Add new products (name, price, description, image URL) → saved to Firestore collection products
+- Import menu from index.html directly into Firestore
+- View all products in a responsive grid layout
+- View and manage user orders from Firestore (orders collection)
+- Update order status (`placed → approved → completed`).
+- Delete products or orders directly from dashboard
 
 ### 🙋‍♂️ User Panel
 
-- Login/Register using localStorage user account.
-- Browse and place orders for available menu items.
-- View order history.
-- Logout functionality included on all main pages (`index.html`, `catering.html`, `user.html`).
+- Login/Register using Firebase Auth
+- Browse menu and add items to cart
+- Cart auto-syncs with Firestore when logged in:
+
+Offline: stored in LocalStorage
+
+Online/login: merged with Firestore
+
+- Checkout → creates new documents in orders collection
+- Catering reservation form sends request to Firestore (reservations collection)
+- View order history (coming soon)
 
 ### 🛒 Cart System
 
-- Fully dynamic cart sidebar with add/remove functionality.
-- Real-time total price calculation.
-- Checkout simulation.
+- Fully dynamic cart sidebar with add/remove functionality
+- Real-time total price calculation
+- Cart saved locally first → synced to Firestore when logged in
+- Works even offline (localStorage fallback)
+- Checkout writes multiple order documents to Firestore using batch writes
 
 ### 🎨 UI & Design
 
-- Responsive saffron-themed layout.
-- Animated hover effects for buttons and pricing.
-- Centered, elegant **place order form** with glowing animation.
-- Consistent navbar and footer styling across all pages.
+- Responsive saffron-themed layout
+- Animated hover effects for buttons and pricing
+- Centered, elegant catering form with glowing animation
+- Consistent navbar and footer styling across all pages
 
 ---
 
@@ -77,38 +73,37 @@ Delete products or orders directly from dashboard
 📦 project/
 │
 ├── index.html # Landing page with menu, hero, and features
-├── catering.html # Catering service form & information
-├── user.html # User login/register + order management
-├── admin.html # Admin login/register + product management
+├── catering.html # Catering service form (Firestore + Auth)
+├── user.html # User login/register + Firestore order sync
+├── admin.html # Admin login + product & order management
 │
 ├── style.css # Main stylesheet (Saffron theme, responsive)
-├── admin.js # Admin logic: auth, products, order control
-├── user.js # User logic: auth, order placement, localStorage
-├── cart.js # Cart handling and sidebar management
-├── catering.js # Catering form and UI interactions
+├── admin.js # Admin logic (Firestore CRUD)
+├── user.js # User login + registration (Firebase Auth)
+├── cart.js # Cart logic (LocalStorage + Firestore sync)
+├── catering.js # Catering reservation (Firestore)
 │
-└── (Optional) firebase.js # Not required — replaced by LocalStorage
+└── firebaseConfig included inline on each page
 ```
 
 ---
 
-## ⚙️ LocalStorage Structure
+## ⚙️ Firestore Structure
 
-| Key                              | Description                                  |
-| -------------------------------- | -------------------------------------------- |
-| `admins`                         | List of admin accounts (email/password).     |
-| `users`                          | List of user accounts.                       |
-| `products`                       | All added menu items by admin.               |
-| `orders`                         | All submitted orders (shared by both roles). |
-| `cart`                           | Temporary shopping cart for user.            |
-| `loggedInAdmin` / `loggedInUser` | Tracks active session.                       |
+| Collection     | Description                             |
+| -------------- | --------------------------------------- |
+| `users`        | User profiles + role (`admin` / `user`) |
+| `products`     | All menu items stored by admin          |
+| `carts`        | User cart (document ID = UID of user)   |
+| `orders`       | List of orders created during checkout  |
+| `reservations` | Catering request form submissions       |
 
 ---
 
 ## 🧩 Default Accounts
 
 ```js
-// Admin (for first-time login)
+// Admin
 Email: admin@contoh.com
 Password: admincontoh
 
@@ -121,36 +116,48 @@ Password: userone
 
 ## 🧠 How It Works
 
-1. When you first load the site, it automatically seeds default data into LocalStorage.
+1. User/Admin login via Firebase Authentication
 
-2. Admin can log in → manage menu & orders.
+2. Admin role is checked from Firestore (users/{uid}.role)
 
-3. User can log in → browse menu & place orders.
+3. Products added in Admin Panel go to Firestore products
 
-4. Data updates in real-time through LocalStorage — no external backend needed.
+4. Cart:
+
+- Stored locally first (LocalStorage)
+- Synced to Firestore when user logs in
+
+5. Checkout:
+
+- Creates multiple order docs in orders (batch write)
+
+6. Catering form:
+
+- Validates guest count
+- Writes to Firestore reservations
 
 ---
 
 ## 🎨 Theme & Colors
 
-| Element    | Color                 | Description                               |
-| ---------- | --------------------- | ----------------------------------------- |
-| Primary    | `#FF9933`             | Saffron orange for buttons and highlights |
-| Hover      | `#CC7A00` / `#E63900` | Dark saffron & crimson for interaction    |
-| Background | `#F5F5DC`             | Warm beige background                     |
-| Text       | `#333333`             | Neutral dark gray for readability         |
+| Element    | Color                 | Description        |
+| ---------- | --------------------- | ------------------ |
+| Primary    | `#FF9933`             | Saffron orange     |
+| Hover      | `#CC7A00` / `#E63900` | Interaction colors |
+| Background | `#F5F5DC`             | Warm beige         |
+| Text       | `#333333`             | Soft dark gray     |
 
 ---
 
 ## 📱 Responsiveness
 
-- The layout is fully responsive:
+- Fully responsive layout
 
-- Grid-based menu and product listing.
+- Grid-based menu
 
-- Flexible catering form layout.
+- Flexible catering form
 
-- Collapsible cart sidebar on smaller screens.
+- Slide-in cart sidebar
 
 ---
 
@@ -159,7 +166,7 @@ Password: userone
 1️⃣ Clone or Download
 
 ```bash
-   git clone https://github.com/yourusername/catering-localstorage.git
+   git clone https://github.com/RaidanRei/Catering-Order-Website.git
 ```
 
 2️⃣ Run locally:
@@ -168,13 +175,31 @@ Password: userone
 open index.html
 ```
 
+3️⃣ Ensure your Firebase config is inserted in each HTML file.
+
+4️⃣ (Optional) First-time product import:
+
+Open browser console on index.html and run:
+
+```bash
+importMenuToFirestore();
+```
+
 ---
 
 ## 💡 Developer Notes
 
-- The project is offline-first and works without internet.
+- LocalStorage is now only used for temporary cart display
 
-- To reset data, clear your browser’s LocalStorage.
+- Firestore is the main database for:
+- Products
+- Orders
+- Carts
+- Reservations
+
+- Works offline-first thanks to local caching
+
+- To reset cart: clear LocalStorage or logout/login
 
 ---
 
